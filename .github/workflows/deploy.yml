@@ -8,8 +8,6 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    env:
-      GCP_VM_IP: ${{ vars.GCP_VM_IP }}
 
     steps:
       - name: Checkout repo
@@ -47,13 +45,13 @@ jobs:
           rm -f ~/.ssh/known_hosts
 
           # 加入 GCP VM 公鑰到 known_hosts
-          ssh-keyscan -H $GCP_VM_IP >> ~/.ssh/known_hosts
+          ssh-keyscan -H ${{ secrets.GCP_CICD_KEY }} >> ~/.ssh/known_hosts
 
           # SSH 測試連線 (加 -vvv 方便除錯)
-          ssh -vvv -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ~/.ssh/id_rsa daisy@$GCP_VM_IP "echo SSH OK" || exit 1
+          ssh -vvv -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ~/.ssh/id_rsa daisy@${{ secrets.GCP_CICD_KEY }} "echo SSH OK" || exit 1
 
           # 傳檔案
-          scp -v -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ~/.ssh/id_rsa -r dist/* daisy@$GCP_VM_IP:/opt/html/crypto || exit 1
+          scp -v -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ~/.ssh/id_rsa -r dist/* daisy@${{ secrets.GCP_CICD_KEY }}:${{ secrets.GCP_VM_PATH }} || exit 1
 
       - name: Disable Firewall Rule
         if: always()
