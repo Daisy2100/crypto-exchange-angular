@@ -72,24 +72,26 @@ export class NavigationService {
                     }
                 ]
             },
-            {
-                id: 'portfolio',
-                displayName: '登入',
-                path: '/portfolio',
-                order: 3
-            },
+
             {
                 id: 'wallet',
                 displayName: '錢包',
                 path: '/wallet',
-                order: 4
+                order: 3
             },
             {
                 id: 'about',
                 displayName: '關於我們',
                 path: '/about',
+                order: 4
+            },
+
+            {
+                id: 'portfolio',
+                displayName: '登入',
+                path: '/portfolio',
                 order: 5
-            }
+            },
         ];
     }
 
