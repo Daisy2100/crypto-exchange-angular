@@ -1,131 +1,139 @@
-<!-- 導航元件 - 完全使用 Tailwind CSS -->
-<div class="bg-white/95 backdrop-blur-md shadow-md border-b border-gray-200 sticky top-0 z-50">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex items-center justify-between h-16 lg:h-20">
+<!-- 賽博龐克導航元件 -->
+<div class="relative nav-cyber-background bg-cyber-grid bg-glitch-lines sticky top-0 z-50">
+    <!-- 背景效果 -->
+    <div class="absolute inset-0 bg-cyber-grid opacity-15"></div>
+    <div class="absolute inset-0 bg-glitch-lines opacity-10"></div>
+
+    <!-- 掃描線 -->
+    <div class="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-neon-cyan to-transparent animate-data-stream opacity-60"></div>
+
+    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- 手機版導航列 -->
+        <div class="lg:hidden flex items-center justify-between h-16">
             <!-- Logo -->
-            <a routerLink="/"
-               class="text-2xl lg:text-3xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent hover:from-blue-700 hover:to-blue-900 transition-all duration-200">
-                {{ logoText }}
+            <a routerLink="/" class="logo-cyber text-lg font-cyber font-bold">
+                <span class="cyber-logo-prefix">></span>
+                <span class="cyber-logo-main">{{ logoText }}</span>
+                <span class="cyber-logo-suffix">_</span>
             </a>
 
-            <!-- Desktop Menu (Hidden on mobile) -->
-            <nav class="hidden lg:flex" *ngIf="!isLoading">
-                <ul class="flex items-center space-x-8">
-                    <li *ngFor="let item of navigationItems; trackBy: trackByNavItem" class="relative group">
-                        <!-- 有子選單的項目 -->
-                        <div *ngIf="hasChildren(item)" class="relative">
-                            <a [routerLink]="item.path"
-                               class="flex items-center px-3 py-2 text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200"
-                               [class.text-blue-600]="item.isActive"
-                               [class.font-semibold]="item.isActive">
-                                {{ item.displayName }}
-                                <i class="pi pi-chevron-down ml-1 text-sm group-hover:rotate-180 transition-transform duration-200"></i>
-                            </a>
-                            <!-- 下拉選單 -->
-                            <ul class="absolute top-full left-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-2 group-hover:translate-y-0">
-                                <li *ngFor="let child of item.children; trackBy: trackByNavItem">
-                                    <a [routerLink]="child.path"
-                                       class="block px-4 py-3 text-gray-700 hover:text-blue-600 hover:bg-blue-50 first:rounded-t-lg last:rounded-b-lg transition-colors duration-200"
-                                       [class.text-blue-600]="child.isActive"
-                                       [class.bg-blue-50]="child.isActive"
-                                       [class.font-medium]="child.isActive">
-                                        {{ child.displayName }}
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-
-                        <!-- 沒有子選單的項目 -->
-                        <a *ngIf="!hasChildren(item)"
-                           [routerLink]="item.path"
-                           class="px-3 py-2 text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200"
-                           [class.text-blue-600]="item.isActive"
-                           [class.font-semibold]="item.isActive">
-                            {{ item.displayName }}
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-
-            <!-- Loading indicator for desktop menu -->
-            <div class="hidden lg:flex items-center space-x-4" *ngIf="isLoading">
-                <div class="h-6 w-16 bg-gray-200 rounded animate-pulse"></div>
-                <div class="h-6 w-20 bg-gray-200 rounded animate-pulse"></div>
-                <div class="h-6 w-18 bg-gray-200 rounded animate-pulse"></div>
-            </div>
-
-            <!-- Mobile Menu Button -->
-            <button class="lg:hidden p-2 rounded-md text-gray-700 hover:text-blue-600 hover:bg-gray-100 transition-colors duration-200 group"
+            <!-- 手機版選單按鈕 -->
+            <button class="p-2 rounded-lg text-neon-cyan hover:text-neon-green hover:bg-cyber-200/20 transition-all duration-300 group border border-neon-cyan/30 hover:border-neon-green/50"
                     (click)="toggleSidebar()"
                     aria-label="Toggle menu">
                 <div class="w-6 h-6 flex flex-col justify-center items-center space-y-1">
-                    <span class="w-6 h-0.5 bg-current transform transition-all duration-200 group-hover:w-7"></span>
-                    <span class="w-6 h-0.5 bg-current transform transition-all duration-200 group-hover:w-5"></span>
-                    <span class="w-6 h-0.5 bg-current transform transition-all duration-200 group-hover:w-7"></span>
+                    <span class="w-5 h-0.5 bg-current transform transition-all duration-300 group-hover:w-6"></span>
+                    <span class="w-5 h-0.5 bg-current transform transition-all duration-300 group-hover:w-4"></span>
+                    <span class="w-5 h-0.5 bg-current transform transition-all duration-300 group-hover:w-6"></span>
                 </div>
             </button>
+        </div>
+
+        <!-- 桌面版 MenuBar -->
+        <div class="hidden lg:block">
+            <p-menubar [model]="menuItems" styleClass="cyber-menubar">
+                <!-- Logo 模板 -->
+                <ng-template #start>
+                    <a routerLink="/" class="logo-cyber text-xl lg:text-2xl font-cyber font-bold mr-12">
+                        <span class="cyber-logo-prefix">></span>
+                        <span class="cyber-logo-main">{{ logoText }}</span>
+                        <span class="cyber-logo-suffix">_</span>
+                    </a>
+                </ng-template>
+
+                <!-- 自定義選單項目模板 -->
+                <ng-template #item let-item let-root="root">
+                    <a pRipple
+                       [routerLink]="item.routerLink"
+                       class="flex items-center p-menubar-item-link cyber-nav-item px-6 py-3"
+                       [class.active]="item.styleClass === 'active'">
+                        <span class="cyber-nav-text tracking-wide">{{ item.label }}</span>
+                        <p-badge *ngIf="item.badge"
+                                 [ngClass]="{ 'ml-auto': !root, 'ml-3': root }"
+                                 [value]="item.badge" />
+                        <span *ngIf="item.shortcut"
+                              class="ml-auto border border-surface rounded bg-emphasis text-muted-color text-xs p-1">
+                            {{ item.shortcut }}
+                        </span>
+                        <i *ngIf="item.items"
+                           [ngClass]="['ml-3 pi', root ? 'pi-angle-down' : 'pi-angle-right']">
+                        </i>
+                    </a>
+                </ng-template>
+
+                <!-- 右側區域 -->
+                <ng-template #end>
+                    <div class="flex items-center cyber-nav-end">
+                        <!-- 系統狀態指示器 -->
+                        <div class="flex items-center gap-2 text-sm font-mono text-neon-cyan opacity-70">
+                            <div class="w-2 h-2 bg-neon-green rounded-full animate-pulse"></div>
+                            <span>ONLINE</span>
+                        </div>
+                    </div>
+                </ng-template>
+            </p-menubar>
+        </div>
+
+        <!-- Loading 狀態 -->
+        <div *ngIf="isLoading" class="flex items-center justify-center h-16 lg:h-20">
+            <div class="text-lg font-mono text-neon-blue animate-neon-pulse">
+                LOADING_NEURAL_NETWORK...
+            </div>
         </div>
     </div>
 </div>
 
-<!-- Full-screen Overlay Menu -->
+<!-- 手機版全螢幕選單 -->
 <p-sidebar [(visible)]="sidebarVisible"
-           position="top"
+           position="full"
            [modal]="true"
-           [closeOnEscape]="true"
-           [dismissible]="true"
-           styleClass="full-screen-menu bg-white/95 backdrop-blur-lg border-none shadow-2xl">
+           [closeOnEscape]="false"
+           [showCloseIcon]="false"
+           [dismissible]="false"
+           styleClass="cyber-fullscreen-menu">
 
-    <div class="min-h-screen flex flex-col">
+    <div class="mobile-menu-container mobile-menu-cyber">
+        <!-- 背景效果 -->
+        <div class="absolute inset-0 bg-cyber-grid opacity-15"></div>
+        <div class="absolute inset-0 bg-glitch-lines opacity-10"></div>
+
         <!-- Header with Close Button -->
-        <div class="flex items-center justify-between p-6 border-b border-gray-200">
-            <div class="text-2xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">
-                {{ logoText }}
+        <div class="mobile-menu-header relative z-10 flex items-center justify-between">
+            <div class="logo-cyber text-xl font-cyber font-bold">
+                <span class="cyber-logo-prefix">></span>
+                <span class="cyber-logo-main">{{ logoText }}</span>
+                <span class="cyber-logo-suffix">_</span>
             </div>
-            <button class="p-2 rounded-full text-gray-500 hover:text-gray-700 hover:bg-gray-100 transition-colors duration-200"
+            <button class="p-2 rounded-full text-neon-cyan hover:text-neon-red hover:bg-cyber-200/20 transition-all duration-300 border border-neon-cyan/30 hover:border-neon-red/50"
                     (click)="closeSidebar()"
                     aria-label="Close menu">
                 <div class="w-6 h-6 relative">
-                    <span class="absolute top-1/2 left-1/2 w-6 h-0.5 bg-current transform -translate-x-1/2 -translate-y-1/2 rotate-45"></span>
-                    <span class="absolute top-1/2 left-1/2 w-6 h-0.5 bg-current transform -translate-x-1/2 -translate-y-1/2 -rotate-45"></span>
+                    <span class="absolute top-1/2 left-1/2 w-5 h-0.5 bg-current transform -translate-x-1/2 -translate-y-1/2 rotate-45"></span>
+                    <span class="absolute top-1/2 left-1/2 w-5 h-0.5 bg-current transform -translate-x-1/2 -translate-y-1/2 -rotate-45"></span>
                 </div>
             </button>
         </div>
 
         <!-- Menu Content -->
-        <div class="flex-1 px-6 py-8">
+        <div class="mobile-menu-content relative z-10">
             <nav *ngIf="!isLoading">
-                <ul class="space-y-6">
-                    <!-- Home Link -->
-                    <li>
-                        <a routerLink="/"
-                           (click)="closeSidebar()"
-                           class="block text-xl font-medium text-gray-700 hover:text-blue-600 transition-colors duration-200 pb-2 border-b border-transparent hover:border-blue-200">
-                            Top
-                        </a>
-                    </li>
-
+                <ul class="space-y-4">
                     <li *ngFor="let item of navigationItems; trackBy: trackByNavItem">
                         <!-- 有子選單的項目 -->
                         <div *ngIf="hasChildren(item)" class="space-y-3">
                             <a [routerLink]="item.path"
                                (click)="closeSidebar()"
-                               class="block text-xl font-medium transition-colors duration-200 pb-2 border-b border-transparent hover:border-blue-200"
-                               [class.text-blue-600]="item.isActive"
-                               [class.border-blue-300]="item.isActive"
-                               [class.text-gray-700]="!item.isActive"
-                               [class.hover:text-blue-600]="!item.isActive">
-                                {{ item.displayName }}
+                               class="mobile-nav-item block text-xl font-cyber font-medium"
+                               [class.active]="item.isActive">
+                                {{ item.displayName.toUpperCase() }}
                             </a>
-                            <ul class="ml-4 space-y-2">
+
+                            <ul class="ml-4 space-y-2 pl-4 border-l border-neon-cyan/30">
                                 <li *ngFor="let child of item.children; trackBy: trackByNavItem">
                                     <a [routerLink]="child.path"
                                        (click)="closeSidebar()"
-                                       class="block text-lg transition-colors duration-200 py-1"
-                                       [class.text-blue-600]="child.isActive"
-                                       [class.font-medium]="child.isActive"
-                                       [class.text-gray-600]="!child.isActive"
-                                       [class.hover:text-blue-600]="!child.isActive">
+                                       class="mobile-nav-item block text-lg font-mono py-1"
+                                       [class.active]="child.isActive">
                                         {{ child.displayName }}
                                     </a>
                                 </li>
@@ -136,25 +144,33 @@
                         <a *ngIf="!hasChildren(item)"
                            [routerLink]="item.path"
                            (click)="closeSidebar()"
-                           class="block text-xl font-medium transition-colors duration-200 pb-2 border-b border-transparent hover:border-blue-200"
-                           [class.text-blue-600]="item.isActive"
-                           [class.border-blue-300]="item.isActive"
-                           [class.text-gray-700]="!item.isActive"
-                           [class.hover:text-blue-600]="!item.isActive">
-                            {{ item.displayName }}
+                           class="mobile-nav-item block text-xl font-cyber font-medium"
+                           [class.active]="item.isActive">
+                            {{ item.displayName.toUpperCase() }}
                         </a>
                     </li>
                 </ul>
             </nav>
 
-            <!-- Loading indicator for overlay menu -->
+            <!-- Loading indicator for mobile menu -->
             <div class="space-y-4" *ngIf="isLoading">
-                <div class="text-lg text-gray-500 animate-pulse">載入選單中...</div>
+                <div class="text-lg font-mono text-neon-blue animate-neon-pulse">LOADING_NEURAL_NETWORK...</div>
                 <div class="space-y-3">
-                    <div class="h-6 w-32 bg-gray-200 rounded animate-pulse"></div>
-                    <div class="h-6 w-28 bg-gray-200 rounded animate-pulse"></div>
-                    <div class="h-6 w-36 bg-gray-200 rounded animate-pulse"></div>
+                    <div class="h-6 w-32 bg-cyber-300/30 rounded animate-neon-pulse"></div>
+                    <div class="h-6 w-28 bg-cyber-300/30 rounded animate-neon-pulse delay-300"></div>
+                    <div class="h-6 w-36 bg-cyber-300/30 rounded animate-neon-pulse delay-600"></div>
                 </div>
+            </div>
+        </div>
+
+        <!-- 底部裝飾 -->
+        <div class="mobile-menu-footer relative z-10">
+            <div class="text-center">
+                <div class="flex items-center justify-center gap-2 text-sm font-mono text-neon-cyan opacity-60">
+                    <div class="w-2 h-2 bg-neon-green rounded-full animate-pulse"></div>
+                    <span>SYSTEM.STATUS: ONLINE</span>
+                </div>
+                <div class="mt-2 w-full h-0.5 bg-gradient-to-r from-transparent via-neon-cyan to-transparent animate-data-stream"></div>
             </div>
         </div>
     </div>

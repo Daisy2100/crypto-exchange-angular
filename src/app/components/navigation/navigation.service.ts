@@ -74,7 +74,7 @@ export class NavigationService {
             },
             {
                 id: 'portfolio',
-                displayName: '投資組合',
+                displayName: '登入',
                 path: '/portfolio',
                 order: 3
             },

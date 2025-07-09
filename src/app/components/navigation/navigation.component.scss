@@ -1,37 +1,652 @@
-// 導航元件樣式 - 僅保留 Tailwind 無法實現的特殊效果
+// 賽博龐克導航樣式
+@use '../../assets/scss/variables' as *;
+@use '../../assets/scss/mixins' as *;
 
 :host {
-  display: block;
+    display: block;
 }
 
-// PrimeNG Sidebar 覆蓋樣式 - 無法用 Tailwind 直接控制的深層樣式
-:host ::ng-deep .full-screen-menu .p-sidebar {
-  width: 100vw !important;
-  height: 100vh !important;
-  position: fixed !important;
-  top: 0 !important;
-  left: 0 !important;
-  z-index: 9999 !important;
-  border: none !important;
-  border-radius: 0 !important;
+// 導航欄背景增強效果
+.nav-cyber-background {
+    background: linear-gradient(135deg,
+            rgba(0, 0, 0, 0.95) 0%,
+            rgba(0, 20, 40, 0.95) 50%,
+            rgba(0, 0, 0, 0.95) 100%);
+    border-bottom: 1px solid rgba(0, 255, 255, 0.3);
+    box-shadow:
+        0 0 30px rgba(0, 255, 255, 0.1),
+        inset 0 1px 0 rgba(0, 255, 255, 0.1);
+    position: relative;
+    overflow: hidden;
 
-  .p-sidebar-content {
-    padding: 0 !important;
-    height: 100% !important;
-    width: 100% !important;
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(90deg,
+                transparent 0%,
+                rgba(0, 255, 255, 0.05) 50%,
+                transparent 100%);
+        pointer-events: none;
+    }
+}
+
+// Logo 增強效果
+.logo-cyber {
+    position: relative;
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #00ffff;
+    text-shadow:
+        0 0 10px #00ffff,
+        0 0 20px #00ffff,
+        0 0 30px #00ffff;
+    display: flex;
+    align-items: center;
+    gap: 0.1em;
+
+    .cyber-logo-prefix {
+        color: #00ff00;
+        font-size: 1.2em;
+        text-shadow:
+            0 0 10px #00ff00,
+            0 0 20px #00ff00;
+        animation: logo-pulse 2s ease-in-out infinite;
+    }
+
+    .cyber-logo-main {
+        color: #00ffff;
+        position: relative;
+
+        &::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg,
+                    transparent 30%,
+                    rgba(0, 255, 255, 0.1) 50%,
+                    transparent 70%);
+            background-size: 200% 200%;
+            animation: logo-hologram 3s linear infinite;
+            pointer-events: none;
+        }
+    }
+
+    .cyber-logo-suffix {
+        color: #ff00ff;
+        font-size: 1.1em;
+        text-shadow:
+            0 0 10px #ff00ff,
+            0 0 20px #ff00ff;
+        animation: logo-pulse 1.5s ease-in-out infinite reverse;
+    }
+
+    &:hover {
+        .cyber-logo-prefix {
+            animation-duration: 0.5s;
+        }
+
+        .cyber-logo-main {
+            text-shadow:
+                0 0 15px #00ffff,
+                0 0 25px #00ffff,
+                0 0 35px #00ffff;
+        }
+
+        .cyber-logo-suffix {
+            animation-duration: 0.3s;
+        }
+    }
+}
+
+// 背景圖案增強
+.bg-cyber-grid {
+    background-image:
+        linear-gradient(to right, rgba(0, 255, 255, 0.1) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(0, 255, 255, 0.1) 1px, transparent 1px);
+    background-size: 30px 30px;
+}
+
+.bg-glitch-lines {
+    background-image:
+        linear-gradient(90deg, transparent 49%, rgba(255, 0, 255, 0.03) 50%, transparent 51%);
+    background-size: 3px 100%;
+}
+
+// PrimeNG MenuBar 賽博龐克樣式
+:host ::ng-deep .cyber-menubar {
     background: transparent !important;
-  }
+    border: none !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+    height: auto !important;
 
-  .p-sidebar-header {
-    display: none !important;
-  }
+    .p-menubar-root-list {
+        background: transparent !important;
+        border: none !important;
+        padding: 0 !important;
+        gap: 1.5rem !important;
+        align-items: center !important;
+    }
+
+    .p-menubar-item {
+        background: transparent !important;
+        border: none !important;
+        margin: 0 !important;
+    }
+
+    .p-menubar-item-content {
+        background: transparent !important;
+        border: none !important;
+        border-radius: 0 !important;
+        transition: all 0.3s ease !important;
+    }
+
+    .p-menubar-item-link {
+        background: transparent !important;
+        border: none !important;
+        border-radius: 0 !important;
+        padding: 1rem 1.5rem !important;
+        color: #00ffff !important;
+        font-family: 'Courier New', monospace !important;
+        font-weight: 500 !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.1em !important;
+        position: relative !important;
+        transition: all 0.3s ease !important;
+        min-height: 3rem !important;
+
+        &::before {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #00ffff, #00ff00, #ff00ff);
+            transition: width 0.3s ease;
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+        }
+
+        &:hover {
+            background: rgba(0, 255, 255, 0.1) !important;
+            color: #00ff00 !important;
+            text-shadow:
+                0 0 10px #00ff00,
+                0 0 20px #00ff00,
+                0 0 30px #00ff00;
+            transform: translateY(-2px);
+
+            &::before {
+                width: 80%;
+                box-shadow:
+                    0 0 15px rgba(0, 255, 255, 0.8),
+                    0 0 25px rgba(0, 255, 0, 0.6);
+            }
+        }
+
+        &.active {
+            color: #00ff00 !important;
+            text-shadow:
+                0 0 10px #00ff00,
+                0 0 20px #00ff00,
+                0 0 30px #00ff00;
+
+            &::before {
+                width: 80%;
+                box-shadow:
+                    0 0 15px rgba(0, 255, 255, 0.8),
+                    0 0 25px rgba(0, 255, 0, 0.6);
+            }
+        }
+
+        .cyber-nav-text {
+            font-size: 0.9rem;
+            font-weight: 600;
+            position: relative;
+            z-index: 1;
+        }
+    }
+
+    .p-menubar-submenu {
+        background: rgba(0, 0, 0, 0.95) !important;
+        border: 1px solid rgba(0, 255, 255, 0.3) !important;
+        border-radius: 0.5rem !important;
+        backdrop-filter: blur(20px) !important;
+        box-shadow:
+            0 0 30px rgba(0, 255, 255, 0.2),
+            inset 0 1px 0 rgba(0, 255, 255, 0.1) !important;
+        padding: 0.5rem 0 !important;
+        margin-top: 0.5rem !important;
+
+        &::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg,
+                    transparent,
+                    #00ffff,
+                    transparent);
+        }
+
+        .p-menubar-item-link {
+            color: #00ffff !important;
+            padding: 0.75rem 1.5rem !important;
+            border-bottom: 1px solid rgba(0, 255, 255, 0.1) !important;
+            font-size: 0.85rem !important;
+
+            &::before {
+                content: '> ';
+                color: #00ff00;
+                opacity: 0;
+                transition: all 0.3s ease;
+                margin-right: 0.5rem;
+                transform: translateX(-5px);
+                position: static;
+                width: auto;
+                height: auto;
+                background: none;
+                box-shadow: none;
+            }
+
+            &:hover {
+                background: linear-gradient(135deg,
+                        rgba(0, 255, 255, 0.15),
+                        rgba(0, 255, 0, 0.1)) !important;
+                color: #00ff00 !important;
+                text-shadow:
+                    0 0 10px #00ff00,
+                    0 0 20px #00ff00;
+                border-bottom-color: rgba(0, 255, 0, 0.3) !important;
+                transform: translateX(5px);
+
+                &::before {
+                    opacity: 1;
+                    transform: translateX(0);
+                    text-shadow: 0 0 10px #00ff00;
+                }
+            }
+        }
+    }
+
+    .p-menubar-item-icon {
+        color: #00ffff !important;
+        margin-right: 0.5rem !important;
+    }
+
+    .p-menubar-submenu-icon {
+        color: #00ffff !important;
+        margin-left: 0.75rem !important;
+        transition: all 0.3s ease !important;
+    }
+
+    .p-menubar-item:hover .p-menubar-submenu-icon {
+        color: #00ff00 !important;
+        transform: rotate(180deg);
+    }
 }
 
-:host ::ng-deep .full-screen-menu .p-sidebar-mask {
-  background: rgba(0, 0, 0, 0.1) !important;
-  z-index: 9998 !important;
-  -webkit-backdrop-filter: blur(5px);
-  backdrop-filter: blur(5px);
+// 右側狀態指示器樣式
+.cyber-nav-end {
+    .w-2 {
+        box-shadow: 0 0 10px rgba(0, 255, 0, 0.8);
+    }
+
+    span {
+        text-shadow: 0 0 8px rgba(0, 255, 255, 0.6);
+        font-size: 0.8rem;
+        letter-spacing: 0.1em;
+    }
 }
 
-// 其他所有樣式都已移至 Tailwind CSS 類別
+// 賽博龐克動畫
+@keyframes logo-pulse {
+
+    0%,
+    100% {
+        text-shadow:
+            0 0 10px currentColor,
+            0 0 20px currentColor;
+    }
+
+    50% {
+        text-shadow:
+            0 0 20px currentColor,
+            0 0 30px currentColor,
+            0 0 40px currentColor;
+    }
+}
+
+@keyframes logo-hologram {
+    0% {
+        background-position: 0% 0%;
+    }
+
+    100% {
+        background-position: 100% 100%;
+    }
+}
+
+// 數據流動畫
+@keyframes dataStream {
+    0% {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+
+    10% {
+        opacity: 1;
+    }
+
+    90% {
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateX(300%);
+        opacity: 0;
+    }
+}
+
+.animate-data-stream {
+    animation: dataStream 6s linear infinite;
+}
+
+// 延遲動畫
+.delay-300 {
+    animation-delay: 0.3s;
+}
+
+.delay-600 {
+    animation-delay: 0.6s;
+}
+
+// 響應式設計
+@media (max-width: 1024px) {
+    :host ::ng-deep .cyber-menubar {
+        .p-menubar-item-link {
+            padding: 0.75rem 1rem !important;
+            font-size: 0.8rem !important;
+        }
+
+        .p-menubar-root-list {
+            gap: 1rem !important;
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    :host ::ng-deep .cyber-menubar {
+        .p-menubar-root-list {
+            flex-direction: column !important;
+            align-items: flex-start !important;
+            gap: 0.5rem !important;
+        }
+
+        .p-menubar-item-link {
+            padding: 0.5rem 0.75rem !important;
+            font-size: 0.75rem !important;
+        }
+    }
+
+    .logo-cyber {
+        font-size: 1rem !important;
+
+        .cyber-logo-prefix,
+        .cyber-logo-suffix {
+            font-size: 1.1em !important;
+        }
+    }
+}
+
+// 手機版選單樣式
+.mobile-menu-cyber {
+    background: linear-gradient(135deg,
+            rgba(0, 0, 0, 0.98) 0%,
+            rgba(0, 20, 40, 0.95) 50%,
+            rgba(0, 0, 0, 0.98) 100%);
+    border: 1px solid rgba(0, 255, 255, 0.3);
+    box-shadow:
+        0 0 50px rgba(0, 255, 255, 0.3),
+        inset 0 0 50px rgba(0, 255, 255, 0.05);
+    backdrop-filter: blur(20px);
+    position: relative;
+    min-height: 100vh;
+    width: 100%;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(45deg,
+                transparent 0%,
+                rgba(0, 255, 255, 0.03) 25%,
+                transparent 50%,
+                rgba(0, 255, 0, 0.03) 75%,
+                transparent 100%);
+        pointer-events: none;
+    }
+}
+
+.mobile-menu-container {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+}
+
+.mobile-menu-header {
+    flex-shrink: 0;
+    padding: 1rem;
+    border-bottom: 1px solid rgba(0, 255, 255, 0.3);
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(20px);
+}
+
+.mobile-menu-content {
+    flex: 1;
+    padding: 2rem 1rem;
+    overflow-y: auto;
+    background: transparent;
+}
+
+.mobile-menu-footer {
+    flex-shrink: 0;
+    padding: 1rem;
+    border-top: 1px solid rgba(0, 255, 255, 0.3);
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(20px);
+}
+
+.mobile-nav-item {
+    position: relative;
+    font-family: 'Courier New', monospace;
+    color: #00ffff;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    padding: 0.75rem 0;
+    width: 100%;
+    text-decoration: none;
+
+    &::before {
+        content: '> ';
+        color: #00ff00;
+        opacity: 0;
+        transition: all 0.3s ease;
+        margin-right: 0.5rem;
+        transform: translateX(-10px);
+    }
+
+    &::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 0;
+        background: linear-gradient(90deg,
+                rgba(0, 255, 255, 0.3),
+                rgba(0, 255, 0, 0.2),
+                transparent);
+        transition: width 0.3s ease;
+    }
+
+    &:hover {
+        color: #00ff00;
+        text-shadow:
+            0 0 15px #00ff00,
+            0 0 25px #00ff00;
+        transform: translateX(8px);
+
+        &::before {
+            opacity: 1;
+            transform: translateX(0);
+            text-shadow: 0 0 15px #00ff00;
+        }
+
+        &::after {
+            width: 3px;
+        }
+    }
+
+    &.active {
+        color: #00ff00;
+        text-shadow:
+            0 0 15px #00ff00,
+            0 0 25px #00ff00;
+
+        &::before {
+            opacity: 1;
+            transform: translateX(0);
+            text-shadow: 0 0 15px #00ff00;
+        }
+
+        &::after {
+            width: 3px;
+            background: linear-gradient(90deg,
+                    rgba(0, 255, 0, 0.6),
+                    rgba(0, 255, 255, 0.4),
+                    transparent);
+        }
+    }
+}
+
+:host ::ng-deep .cyber-fullscreen-menu .p-drawer-top .p-drawer {
+    height: 100vh !important;
+}
+
+// PrimeNG Sidebar 自定義樣式
+:host ::ng-deep .cyber-fullscreen-menu {
+
+    height: 100vh;
+    width: 100vw;
+
+    .p-drawer {
+        display: contents;
+    }
+
+    // .p-sidebar {
+    //     background: transparent !important;
+    //     border: none !important;
+    //     width: 100vw !important;
+    //     height: 100vh !important;
+    //     position: fixed !important;
+    //     top: 0 !important;
+    //     left: 0 !important;
+    //     right: 0 !important;
+    //     bottom: 0 !important;
+    //     z-index: 9999 !important;
+    //     border-radius: 0 !important;
+    //     max-width: 100vw !important;
+    //     max-height: 100vh !important;
+    // }
+
+    // 強制隱藏 PrimeNG Drawer/Sidebar 的標題欄
+    .p-drawer-header,
+    .p-sidebar-header {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        height: 0 !important;
+        width: 0 !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        position: absolute !important;
+        left: -9999px !important;
+        top: -9999px !important;
+        z-index: -1 !important;
+    }
+
+    // 隱藏所有相關的按鈕和內容
+    .p-drawer-header *,
+    .p-sidebar-header *,
+    .closeButton,
+    .p-button,
+    .p-sidebar-close,
+    .p-sidebar-header-content,
+    .p-sidebar-icons,
+    .p-sidebar-close-icon,
+    .p-sidebar-header-actions {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        position: absolute !important;
+        left: -9999px !important;
+        top: -9999px !important;
+        z-index: -1 !important;
+    }
+
+    .p-drawer-content,
+    .p-sidebar-content {
+        padding: 0 !important;
+        height: 100vh !important;
+        width: 100vw !important;
+        background: transparent !important;
+        overflow-y: auto;
+        overflow-x: hidden;
+        position: relative !important;
+        top: 0 !important;
+        left: 0 !important;
+    }
+
+    .p-sidebar-mask {
+        background: rgba(0, 0, 0, 0.95) !important;
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        z-index: 9998 !important;
+    }
+}
+
+// 深色模式優化
+@media (prefers-color-scheme: dark) {
+    .bg-cyber-grid {
+        background-image:
+            linear-gradient(to right, rgba(0, 255, 255, 0.15) 1px, transparent 1px),
+            linear-gradient(to bottom, rgba(0, 255, 255, 0.15) 1px, transparent 1px);
+    }
+}
+
