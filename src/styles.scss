@@ -1,3 +1,340 @@
+/* 導入自定義樣式 - @use 規則必須在最前面 */
+@use 'assets/scss/_variables' as *;
+@use 'assets/scss/_mixins' as *;
+
+/* 導入 Tailwind CSS */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* 全域樣式重置和基礎設定 */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+    font-size: 16px;
+
+    @media (max-width: $breakpoint-sm) {
+        font-size: 14px;
+    }
+}
+
+body {
+    @include body-text();
+    color: $color-text-primary;
+    background: $color-white;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+}
+
+/* 標題樣式 */
+h1, h2, h3, h4, h5, h6 {
+    font-family: $font-family-primary;
+    font-weight: $font-weight-semibold;
+    line-height: 1.2;
+    margin-bottom: $spacing-4;
+    color: $color-text-primary;
+}
+
+h1 { @include heading-style($font-size-4xl, $font-weight-bold); }
+h2 { @include heading-style($font-size-3xl, $font-weight-semibold); }
+h3 { @include heading-style($font-size-2xl, $font-weight-semibold); }
+h4 { @include heading-style($font-size-xl, $font-weight-medium); }
+h5 { @include heading-style($font-size-lg, $font-weight-medium); }
+h6 { @include heading-style($font-size-base, $font-weight-medium); }
+
+/* 連結樣式 */
+a {
+    color: $color-primary-600;
+    text-decoration: none;
+    transition: color $transition-fast;
+
+    &:hover {
+        color: $color-primary-700;
+    }
+
+    &:focus {
+        outline: 2px solid alpha-color($color-primary, 0.5);
+        outline-offset: 2px;
+    }
+}
+
+/* 按鈕樣式 */
+.btn {
+    @include button-base();
+
+    &.btn-primary {
+        @include button-primary();
+    }
+
+    &.btn-secondary {
+        @include button-secondary();
+    }
+
+    &.btn-success {
+        @include button-success();
+    }
+
+    &.btn-danger {
+        @include button-danger();
+    }
+
+    &.btn-sm {
+        padding: $spacing-2 $spacing-4;
+        font-size: $font-size-sm;
+    }
+
+    &.btn-lg {
+        padding: $spacing-4 $spacing-8;
+        font-size: $font-size-lg;
+    }
+}
+
+/* 表單樣式 */
+input, textarea, select {
+    @include input-base();
+}
+
+/* 卡片樣式 */
+.card {
+    @include card-base();
+    padding: $spacing-6;
+
+    &.card-hover {
+        @include card-hover();
+    }
+
+    &.card-interactive {
+        @include card-interactive();
+    }
+}
+
+/* 工具類別 */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 $spacing-6;
+
+    @include mobile() {
+        padding: 0 $spacing-4;
+    }
+}
+
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.text-right { text-align: right; }
+
+.font-mono { font-family: $font-family-mono; }
+
+.text-primary { color: $color-primary; }
+.text-success { color: $color-success; }
+.text-danger { color: $color-danger; }
+.text-warning { color: $color-warning; }
+.text-muted { color: $color-text-muted; }
+
+.bg-primary { background-color: $color-primary; }
+.bg-success { background-color: $color-success; }
+.bg-danger { background-color: $color-danger; }
+.bg-warning { background-color: $color-warning; }
+
+/* 響應式工具 */
+.hidden-mobile {
+    @include mobile() {
+        display: none !important;
+    }
+}
+
+.hidden-desktop {
+    @include desktop() {
+        display: none !important;
+    }
+}
+
+.show-mobile {
+    display: none !important;
+
+    @include mobile() {
+        display: block !important;
+    }
+}
+
+.show-desktop {
+    display: none !important;
+
+    @include desktop() {
+        display: block !important;
+    }
+}
+
+/* 加密貨幣相關樣式 */
+.crypto-price {
+    @include price-display();
+
+    &.price-up {
+        color: $color-success !important;
+    }
+
+    &.price-down {
+        color: $color-danger !important;
+    }
+
+    &.price-neutral {
+        color: $color-text-secondary !important;
+    }
+}
+
+.crypto-badge {
+    @include crypto-badge();
+
+    &.badge-bitcoin {
+        background: $color-bitcoin;
+        color: $color-white;
+    }
+
+    &.badge-ethereum {
+        background: $color-ethereum;
+        color: $color-white;
+    }
+
+    &.badge-success {
+        background: $color-success;
+        color: $color-white;
+    }
+
+    &.badge-danger {
+        background: $color-danger;
+        color: $color-white;
+    }
+}
+
+/* 載入動畫 */
+.loading-shimmer {
+    @include loading-shimmer();
+    border-radius: $radius-md;
+}
+
+.loading-pulse {
+    @include loading-pulse();
+}
+
+.loading-spin {
+    @include loading-spin();
+}
+
+/* 滾動條樣式 */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: $color-gray-100;
+    border-radius: $radius-sm;
+}
+
+::-webkit-scrollbar-thumb {
+    background: $color-gray-300;
+    border-radius: $radius-sm;
+
+    &:hover {
+        background: $color-gray-400;
+    }
+}
+
+/* PrimeNG 元件樣式覆蓋 */
+.p-component {
+    font-family: $font-family-primary;
+}
+
+.p-button {
+    border-radius: $radius-lg;
+    font-weight: $font-weight-medium;
+    transition: all $transition-fast;
+
+    &.p-button-primary {
+        background: $color-primary;
+        border-color: $color-primary;
+
+        &:hover {
+            background: $color-primary-700;
+            border-color: $color-primary-700;
+        }
+    }
+}
+
+.p-inputtext {
+    border-radius: $radius-lg;
+    border-color: $color-border-medium;
+
+    &:focus {
+        border-color: $color-primary;
+        box-shadow: 0 0 0 3px alpha-color($color-primary, 0.1);
+    }
+}
+
+/* 動畫入場效果 */
+.fade-in {
+    animation: fadeIn 0.6s ease-out;
+}
+
+.slide-in-bottom {
+    animation: slideInFromBottom 0.8s ease-out;
+}
+
+.slide-in-top {
+    animation: slideInFromTop 0.8s ease-out;
+}
+
+/* 暗色主題支援（預留） */
+@media (prefers-color-scheme: dark) {
+    body {
+        background: $color-surface-dark-0;
+        color: $color-text-dark-primary;
+    }
+
+    .card {
+        background: $color-surface-dark-100;
+        border-color: $color-surface-dark-200;
+    }
+}
+
+/* 印刷樣式 */
+@media print {
+    * {
+        background: transparent !important;
+        color: black !important;
+        box-shadow: none !important;
+        text-shadow: none !important;
+    }
+
+    a, a:visited {
+        text-decoration: underline;
+    }
+
+    .no-print {
+        display: none !important;
+    }
+}
+
+/* 輔助功能 */
+.sr-only {
+    @include visually-hidden();
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}

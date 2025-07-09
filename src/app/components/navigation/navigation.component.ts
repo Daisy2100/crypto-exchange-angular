@@ -14,7 +14,7 @@ import { NavigationService, NavigationItem } from './navigation.service';
     styleUrl: './navigation.component.scss'
 })
 export class NavigationComponent implements OnInit {
-    @Input() logoText: string = 'CryptoEx 2000'; // 可自定義的 Logo 文字
+    @Input() logoText: string = 'CryptoExchange'; // 可自定義的 Logo 文字
 
     sidebarVisible: boolean = false;
     navigationItems: NavigationItem[] = [];

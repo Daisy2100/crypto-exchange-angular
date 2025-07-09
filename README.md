@@ -1,6 +1,6 @@
-# Portfolio Template - Angular 19 專案
+# CryptoExchange - 加密貨幣交易所媒合平台
 
-一個使用 Angular 19 和 PrimeNG 19 建構的現代響應式作品集模板，具備完整的導航系統和模組化架構。
+一個使用 Angular 19 和 PrimeNG 19 建構的現代化加密貨幣交易所媒合平台，提供安全、高效的數位資產交易體驗。
 
 ## 🚀 技術規格
 
@@ -12,30 +12,39 @@
 
 ## 📋 功能特色
 
-### 🎨 UI/UX 設計
+### 🔐 安全性設計
+- ✅ 多層次安全防護機制
+- ✅ 端對端加密數據傳輸
+- ✅ 用戶身份驗證與授權系統
+- ✅ 交易風險控制系統
+
+### 💹 交易功能
+- ✅ 實時價格數據顯示
+- ✅ 多種數位貨幣支援
+- ✅ 訂單簿與交易歷史
+- ✅ 高頻交易引擎整合
+- ✅ 買賣訂單媒合系統
+
+### 🎨 現代化界面
 - ✅ 響應式設計，支援桌面版和行動版
-- ✅ 現代化的樣式系統，使用 SCSS 變數管理
-- ✅ PrimeNG 元件庫整合
-- ✅ 自訂字型和顏色主題系統
+- ✅ 暗色/亮色主題切換
+- ✅ 即時數據視覺化圖表
+- ✅ 直觀的交易操作界面
+- ✅ PrimeNG 專業元件庫
 
-### 🧭 導航系統
-- ✅ 動態導航元件，支援自訂 Logo
-- ✅ 響應式側邊欄 (行動版)
-- ✅ 載入狀態指示器
-- ✅ 活動路由狀態顯示
-- ✅ 可配置的選單項目
-
-### 📄 頁面結構
-- ✅ 首頁 (Home)
-- ✅ 關於 (About)
-- ✅ 新聞 (News)
-- ✅ 聯絡 (Contact)
+### � 數據分析
+- ✅ 實時市場數據分析
+- ✅ 價格走勢圖表
+- ✅ 交易量統計
+- ✅ 市場深度分析
+- ✅ 技術指標支援
 
 ### 🏗️ 架構特點
-- ✅ 獨立元件 (Standalone Components)
-- ✅ 模組化服務架構
+- ✅ 微服務架構設計
+- ✅ 高可用性與擴展性
+- ✅ Angular 19 現代化框架
 - ✅ TypeScript 嚴格模式
-- ✅ 現代化路由配置
+- ✅ 模組化元件系統
 
 ## 🛠️ 開發環境設置
 
@@ -49,7 +58,7 @@
 ```bash
 # 克隆專案
 git clone <repository-url>
-cd template-angular
+cd crypto-exchange-angular
 
 # 安裝相依套件
 npm install
@@ -77,7 +86,7 @@ npm run build
 ng build --configuration production
 ```
 
-建構結果將輸出到 `dist/portfolio` 目錄。
+建構結果將輸出到 `dist/crypto-exchange` 目錄。
 
 ### 開發監視模式
 
@@ -103,49 +112,78 @@ ng test --code-coverage
 src/
 ├── app/
 │   ├── components/           # 共用元件
-│   │   └── navigation/       # 導航元件
-│   │       ├── navigation.component.ts
-│   │       ├── navigation.service.ts
-│   │       └── README.md     # 導航元件文件
+│   │   ├── navigation/       # 導航元件
+│   │   ├── footer/          # 頁尾元件
+│   │   ├── trading-chart/   # 交易圖表元件
+│   │   └── order-book/      # 訂單簿元件
 │   ├── pages/               # 頁面元件
-│   │   ├── home/            # 首頁
-│   │   ├── about/           # 關於頁面
-│   │   ├── news/            # 新聞頁面
-│   │   └── contact/         # 聯絡頁面
-│   ├── services/            # 共用服務
+│   │   ├── home/            # 首頁 - 市場概覽
+│   │   ├── trading/         # 交易頁面
+│   │   ├── portfolio/       # 投資組合
+│   │   ├── markets/         # 市場數據
+│   │   └── about/           # 關於我們
+│   ├── services/            # 核心服務
+│   │   ├── api.service.ts   # API 服務
+│   │   ├── websocket.service.ts  # WebSocket 服務
+│   │   ├── auth.service.ts  # 身份驗證服務
+│   │   └── trading.service.ts    # 交易服務
 │   ├── models/              # 資料模型
+│   │   ├── market.model.ts  # 市場數據模型
+│   │   ├── order.model.ts   # 訂單模型
+│   │   └── user.model.ts    # 用戶模型
 │   ├── enums/               # 列舉定義
+│   │   ├── order-type.enum.ts   # 訂單類型
+│   │   └── market-status.enum.ts # 市場狀態
 │   ├── app.component.*      # 根元件
 │   ├── app.config.ts        # 應用程式配置
 │   └── app.routes.ts        # 路由配置
 ├── assets/
 │   ├── styles.scss          # 全域樣式
+│   ├── images/              # 圖片資源
 │   └── scss/
-│       └── _variables.scss  # SCSS 變數定義
+│       ├── _variables.scss  # SCSS 變數定義
+│       ├── _mixins.scss     # SCSS 混入
+│       └── _themes.scss     # 主題定義
 └── environments/            # 環境配置
+    ├── environment.ts       # 開發環境
+    └── environment.prod.ts  # 生產環境
 ```
 
-## 🎨 樣式架構
+## 🎨 現代化樣式架構
 
-### SCSS 變數系統
-專案使用完整的 SCSS 變數系統，定義於 `src/assets/scss/_variables.scss`：
+### 色彩主題系統
+專案使用完整的色彩主題系統，支援加密貨幣交易所的專業需求：
 
-- **字型系統**: 主要和次要字型家族定義
-- **字重**: 從 light (300) 到 bold (700)
-- **字體大小**: 從 xs (11px) 到 4xl (48px)
-- **顏色系統**: Primary、Gray 色階完整定義
-- **間距和佈局**: 標準化間距系統
+- **主色調**: 現代化藍色系統 (#3b82f6)
+- **成功色**: 綠色系統，用於漲幅和買入操作
+- **危險色**: 紅色系統，用於跌幅和賣出操作
+- **中性色**: 灰色階層，用於背景和文字
+- **暗色主題**: 專為長時間使用設計的護眼模式
 
-### 使用現代 @use 語法
+### SCSS 現代化特性
 
 ```scss
 @use 'scss/_variables' as *;
+@use 'scss/_mixins' as *;
 
-.my-component {
-  font-family: $font-family-primary;
-  color: $color-primary-500;
+.trading-component {
+  background: var(--surface-0);
+  color: var(--text-color);
+  
+  .price-up {
+    color: $color-success-500;
+  }
+  
+  .price-down {
+    color: $color-danger-500;
+  }
 }
 ```
+
+### 響應式設計原則
+- **行動優先**: 優先考慮手機端交易體驗
+- **觸控友好**: 適配觸控螢幕操作
+- **高密度顯示**: 支援專業交易員的多螢幕需求
 
 ## 🧩 核心元件
 

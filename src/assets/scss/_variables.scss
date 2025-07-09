@@ -1,39 +1,47 @@
 @use 'sass:color';
 
-// Font Families
-$font-family-primary: "Manrope", "IBM Plex Sans JP", yakuhanjp, -apple-system, blinkmacsystemfont, "Helvetica Neue", hiragino sans, "\30d2\30e9\30ae\30ce\89d2\30b4 ProN W3", hiragino kaku gothic pron, "Yu Gothic", yugothic, verdana, meiryo, "M+ 1p", sans-serif;
+// Font Families - 現代化字體堆疊
+$font-family-primary: "Inter", "SF Pro Display", -apple-system, blinkmacsystemfont, "Segoe UI", roboto, "Helvetica Neue", arial, "Noto Sans", sans-serif;
+$font-family-mono: "JetBrains Mono", "Fira Code", "SF Mono", monaco, inconsolata, "Roboto Mono", "Droid Sans Mono", "Courier New", monospace;
 $font-family-secondary: -apple-system, blinkmacsystemfont, "Segoe UI", roboto, "Helvetica Neue", arial, sans-serif;
 
 // Font Weights
+$font-weight-thin: 100;
 $font-weight-light: 300;
 $font-weight-normal: 400;
 $font-weight-medium: 500;
 $font-weight-semibold: 600;
 $font-weight-bold: 700;
+$font-weight-extrabold: 800;
+$font-weight-black: 900;
 
-// Font Sizes
-$font-size-xs: 0.6875rem;   // 11px
-$font-size-sm: 0.75rem;     // 12px
-$font-size-base: 0.875rem;  // 14px
-$font-size-lg: 1rem;        // 16px
-$font-size-xl: 1.25rem;     // 20px
-$font-size-2xl: 1.75rem;    // 28px
-$font-size-3xl: 2.25rem;    // 36px
-$font-size-4xl: 3rem;       // 48px
+// Font Sizes - 擴展的字體尺寸系統
+$font-size-xs: 0.75rem;      // 12px
+$font-size-sm: 0.875rem;     // 14px
+$font-size-base: 1rem;       // 16px
+$font-size-lg: 1.125rem;     // 18px
+$font-size-xl: 1.25rem;      // 20px
+$font-size-2xl: 1.5rem;      // 24px
+$font-size-3xl: 1.875rem;    // 30px
+$font-size-4xl: 2.25rem;     // 36px
+$font-size-5xl: 3rem;        // 48px
+$font-size-6xl: 3.75rem;     // 60px
 
 // Letter Spacing
+$letter-spacing-tighter: -0.05em;
 $letter-spacing-tight: -0.025em;
 $letter-spacing-normal: 0;
 $letter-spacing-wide: 0.025em;
 $letter-spacing-wider: 0.05em;
 $letter-spacing-widest: 0.1em;
 
-// Colors
+// Base Colors
 $color-black: #000000;
 $color-white: #ffffff;
+$color-transparent: transparent;
 
-// Primary Colors
-$color-primary: #3b82f6;        // Blue-500
+// Primary Colors - 現代化藍色系統
+$color-primary: #2563eb;        // Blue-600 (更深的藍色作為主色)
 $color-primary-50: #eff6ff;
 $color-primary-100: #dbeafe;
 $color-primary-200: #bfdbfe;
@@ -44,31 +52,156 @@ $color-primary-600: #2563eb;
 $color-primary-700: #1d4ed8;
 $color-primary-800: #1e40af;
 $color-primary-900: #1e3a8a;
+$color-primary-950: #172554;
 
-// Gray Colors
-$color-gray-50: #f9fafb;
-$color-gray-100: #f7f8fc;
-$color-gray-200: #edf2f7;
-$color-gray-300: #e2e8f0;
-$color-gray-400: #cbd5e0;
-$color-gray-500: #a0aec0;
-$color-gray-600: #718096;
-$color-gray-700: #4a5568;
-$color-gray-800: #2d3748;
-$color-gray-900: #1a202c;
+// Success Colors - 交易成功/漲幅
+$color-success-50: #f0fdf4;
+$color-success-100: #dcfce7;
+$color-success-200: #bbf7d0;
+$color-success-300: #86efac;
+$color-success-400: #4ade80;
+$color-success-500: #22c55e;
+$color-success-600: #16a34a;
+$color-success-700: #15803d;
+$color-success-800: #166534;
+$color-success-900: #14532d;
+$color-success: $color-success-500;
 
-// Transitions
-$transition-fast: 0.15s ease;
-$transition-normal: 0.3s ease;
-$transition-slow: 0.5s ease;
+// Danger Colors - 交易失敗/跌幅
+$color-danger-50: #fef2f2;
+$color-danger-100: #fee2e2;
+$color-danger-200: #fecaca;
+$color-danger-300: #fca5a5;
+$color-danger-400: #f87171;
+$color-danger-500: #ef4444;
+$color-danger-600: #dc2626;
+$color-danger-700: #b91c1c;
+$color-danger-800: #991b1b;
+$color-danger-900: #7f1d1d;
+$color-danger: $color-danger-500;
 
-// Spacing
-$spacing-xs: 0.25rem;   // 4px
-$spacing-sm: 0.5rem;    // 8px
-$spacing-md: 1rem;      // 16px
-$spacing-lg: 1.5rem;    // 24px
-$spacing-xl: 2rem;      // 32px
-$spacing-2xl: 3rem;     // 48px
+// Warning Colors
+$color-warning-50: #fffbeb;
+$color-warning-100: #fef3c7;
+$color-warning-200: #fde68a;
+$color-warning-300: #fcd34d;
+$color-warning-400: #fbbf24;
+$color-warning-500: #f59e0b;
+$color-warning-600: #d97706;
+$color-warning-700: #b45309;
+$color-warning-800: #92400e;
+$color-warning-900: #78350f;
+$color-warning: $color-warning-500;
+
+// Gray Colors - 擴展的灰色系統
+$color-gray-50: #f8fafc;
+$color-gray-100: #f1f5f9;
+$color-gray-200: #e2e8f0;
+$color-gray-300: #cbd5e1;
+$color-gray-400: #94a3b8;
+$color-gray-500: #64748b;
+$color-gray-600: #475569;
+$color-gray-700: #334155;
+$color-gray-800: #1e293b;
+$color-gray-900: #0f172a;
+$color-gray-950: #020617;
+
+// Surface Colors - 深色主題支援
+$color-surface-0: $color-white;
+$color-surface-50: $color-gray-50;
+$color-surface-100: $color-gray-100;
+$color-surface-200: $color-gray-200;
+$color-surface-300: $color-gray-300;
+
+// Dark Theme Surface Colors
+$color-surface-dark-0: $color-gray-950;
+$color-surface-dark-50: $color-gray-900;
+$color-surface-dark-100: $color-gray-800;
+$color-surface-dark-200: $color-gray-700;
+$color-surface-dark-300: $color-gray-600;
+
+// Text Colors
+$color-text-primary: $color-gray-900;
+$color-text-secondary: $color-gray-600;
+$color-text-muted: $color-gray-500;
+$color-text-inverse: $color-white;
+
+// Dark Theme Text Colors
+$color-text-dark-primary: $color-gray-100;
+$color-text-dark-secondary: $color-gray-300;
+$color-text-dark-muted: $color-gray-400;
+
+// Border Colors
+$color-border-light: $color-gray-200;
+$color-border-medium: $color-gray-300;
+$color-border-dark: $color-gray-400;
+
+// Accent Colors - 金融主題
+$color-accent-gold: #f59e0b;
+$color-accent-silver: #6b7280;
+$color-accent-bronze: #92400e;
+
+// Crypto Specific Colors
+$color-bitcoin: #f7931a;
+$color-ethereum: #627eea;
+$color-crypto-bull: $color-success-500;  // 牛市
+$color-crypto-bear: $color-danger-500;   // 熊市
+
+// Transitions - 現代化動畫時間
+$transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+$transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+$transition-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+$transition-bounce: 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+// Shadows - 現代化陰影系統
+$shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+$shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+$shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+$shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+$shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+$shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+$shadow-inner: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06);
+
+// Spacing - 更細緻的間距系統
+$spacing-0: 0;
+$spacing-px: 1px;
+$spacing-0_5: 0.125rem;  // 2px
+$spacing-1: 0.25rem;     // 4px
+$spacing-1_5: 0.375rem;  // 6px
+$spacing-2: 0.5rem;      // 8px
+$spacing-2_5: 0.625rem;  // 10px
+$spacing-3: 0.75rem;     // 12px
+$spacing-3_5: 0.875rem;  // 14px
+$spacing-4: 1rem;        // 16px
+$spacing-5: 1.25rem;     // 20px
+$spacing-6: 1.5rem;      // 24px
+$spacing-7: 1.75rem;     // 28px
+$spacing-8: 2rem;        // 32px
+$spacing-9: 2.25rem;     // 36px
+$spacing-10: 2.5rem;     // 40px
+$spacing-12: 3rem;       // 48px
+$spacing-16: 4rem;       // 64px
+$spacing-20: 5rem;       // 80px
+$spacing-24: 6rem;       // 96px
+$spacing-32: 8rem;       // 128px
+
+// 向後兼容
+$spacing-xs: $spacing-1;
+$spacing-sm: $spacing-2;
+$spacing-md: $spacing-4;
+$spacing-lg: $spacing-6;
+$spacing-xl: $spacing-8;
+$spacing-2xl: $spacing-12;
+
+// Border Radius - 現代化圓角系統
+$radius-none: 0;
+$radius-sm: 0.125rem;    // 2px
+$radius-md: 0.375rem;    // 6px
+$radius-lg: 0.5rem;      // 8px
+$radius-xl: 0.75rem;     // 12px
+$radius-2xl: 1rem;       // 16px
+$radius-3xl: 1.5rem;     // 24px
+$radius-full: 9999px;
 
 // Z-index
 $z-index-dropdown: 1000;
@@ -78,9 +211,16 @@ $z-index-modal-backdrop: 1040;
 $z-index-modal: 1050;
 $z-index-popover: 1060;
 $z-index-tooltip: 1070;
+$z-index-toast: 1080;
+
+// Breakpoints
+$breakpoint-sm: 640px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 1024px;
+$breakpoint-xl: 1280px;
+$breakpoint-2xl: 1536px;
 
 // Color helper functions using modern Sass syntax
-// 替代舊版 darken() 函數的現代化方法
 @function darken-color($color, $amount) {
   @return color.adjust($color, $lightness: -$amount);
 }
@@ -89,6 +229,13 @@ $z-index-tooltip: 1070;
   @return color.adjust($color, $lightness: $amount);
 }
 
+@function alpha-color($color, $alpha) {
+  @return color.change($color, $alpha: $alpha);
+}
+
 // 常用的顏色變體
 $color-primary-darker: darken-color($color-primary, 8%);
-$color-primary-darker-alt: darken-color($color-primary, 10%);
+$color-primary-lighter: lighten-color($color-primary, 8%);
+$color-primary-alpha-10: alpha-color($color-primary, 0.1);
+$color-primary-alpha-20: alpha-color($color-primary, 0.2);
+$color-primary-alpha-50: alpha-color($color-primary, 0.5);

@@ -25,10 +25,10 @@ export class NavigationService {
     getNavigationItems(): Observable<NavigationItem[]> {
         // 直接回傳預設的導航項目
         return of(this.getDefaultNavigationItems());
-    }  /**
-   * 取得預設的導航項目
-   * @returns NavigationItem[]
-   */
+    }    /**
+     * 取得預設的導航項目
+     * @returns NavigationItem[]
+     */
     getDefaultNavigationItems(): NavigationItem[] {
         return [
             {
@@ -38,16 +38,57 @@ export class NavigationService {
                 order: 0
             },
             {
-                id: 'about',
-                displayName: '錢包',
-                path: '/about',
+                id: 'markets',
+                displayName: '市場',
+                path: '/markets',
                 order: 1
             },
             {
+                id: 'trading',
+                displayName: '交易',
+                path: '/trading',
+                order: 2,
+                children: [
+                    {
+                        id: 'trading-spot',
+                        displayName: '現貨交易',
+                        path: '/trading/spot',
+                        order: 0,
+                        parentId: 'trading'
+                    },
+                    {
+                        id: 'trading-futures',
+                        displayName: '期貨交易',
+                        path: '/trading/futures',
+                        order: 1,
+                        parentId: 'trading'
+                    },
+                    {
+                        id: 'trading-options',
+                        displayName: '選擇權',
+                        path: '/trading/options',
+                        order: 2,
+                        parentId: 'trading'
+                    }
+                ]
+            },
+            {
+                id: 'portfolio',
+                displayName: '投資組合',
+                path: '/portfolio',
+                order: 3
+            },
+            {
+                id: 'wallet',
+                displayName: '錢包',
+                path: '/wallet',
+                order: 4
+            },
+            {
                 id: 'about',
-                displayName: '登入',
+                displayName: '關於我們',
                 path: '/about',
-                order: 1
+                order: 5
             }
         ];
     }

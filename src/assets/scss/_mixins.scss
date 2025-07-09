@@ -12,11 +12,165 @@
   font: $weight $size $family;
 }
 
-// Hover link mixin
-@mixin hover-link($default-color, $hover-color) {
+// Modern typography mixins
+@mixin heading-style($size: $font-size-2xl, $weight: $font-weight-bold) {
+  font-family: $font-family-primary;
+  font-size: $size;
+  font-weight: $weight;
+  line-height: 1.2;
+  letter-spacing: $letter-spacing-tight;
+}
+
+@mixin body-text($size: $font-size-base, $weight: $font-weight-normal) {
+  font-family: $font-family-primary;
+  font-size: $size;
+  font-weight: $weight;
+  line-height: 1.6;
+  letter-spacing: $letter-spacing-normal;
+}
+
+@mixin mono-text($size: $font-size-sm) {
+  font-family: $font-family-mono;
+  font-size: $size;
+  font-weight: $font-weight-normal;
+  line-height: 1.4;
+  letter-spacing: $letter-spacing-normal;
+}
+
+// Hover link mixin - 現代化
+@mixin hover-link($default-color, $hover-color, $transition: $transition-fast) {
   color: $default-color;
-  transition: color $transition-normal;
-  &:hover { color: $hover-color; }
+  transition: color $transition, transform $transition;
+  text-decoration: none;
+
+  &:hover {
+    color: $hover-color;
+    transform: translateY(-1px);
+  }
+
+  &:focus {
+    outline: 2px solid alpha-color($color-primary, 0.5);
+    outline-offset: 2px;
+  }
+}
+
+// Button mixins
+@mixin button-base() {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-2;
+  padding: $spacing-3 $spacing-6;
+  border: none;
+  border-radius: $radius-lg;
+  font-family: $font-family-primary;
+  font-weight: $font-weight-medium;
+  font-size: $font-size-sm;
+  line-height: 1;
+  cursor: pointer;
+  transition: all $transition-fast;
+  text-decoration: none;
+  white-space: nowrap;
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  &:focus {
+    outline: 2px solid alpha-color($color-primary, 0.5);
+    outline-offset: 2px;
+  }
+}
+
+@mixin button-primary() {
+  @include button-base();
+  background: $color-primary;
+  color: $color-white;
+
+  &:hover:not(:disabled) {
+    background: $color-primary-700;
+    transform: translateY(-1px);
+    box-shadow: $shadow-lg;
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
+    box-shadow: $shadow-md;
+  }
+}
+
+@mixin button-secondary() {
+  @include button-base();
+  background: $color-white;
+  color: $color-gray-700;
+  border: 1px solid $color-border-medium;
+
+  &:hover:not(:disabled) {
+    background: $color-gray-50;
+    border-color: $color-gray-400;
+    transform: translateY(-1px);
+    box-shadow: $shadow-md;
+  }
+}
+
+@mixin button-success() {
+  @include button-base();
+  background: $color-success;
+  color: $color-white;
+
+  &:hover:not(:disabled) {
+    background: $color-success-600;
+    transform: translateY(-1px);
+    box-shadow: $shadow-lg;
+  }
+}
+
+@mixin button-danger() {
+  @include button-base();
+  background: $color-danger;
+  color: $color-white;
+
+  &:hover:not(:disabled) {
+    background: $color-danger-600;
+    transform: translateY(-1px);
+    box-shadow: $shadow-lg;
+  }
+}
+
+// Card mixins
+@mixin card-base() {
+  background: $color-white;
+  border: 1px solid $color-border-light;
+  border-radius: $radius-xl;
+  box-shadow: $shadow-sm;
+  transition: all $transition-normal;
+}
+
+@mixin card-hover() {
+  &:hover {
+    box-shadow: $shadow-lg;
+    transform: translateY(-2px);
+    border-color: $color-border-medium;
+  }
+}
+
+@mixin card-interactive() {
+  @include card-base();
+  @include card-hover();
+  cursor: pointer;
+
+  &:focus {
+    outline: 2px solid alpha-color($color-primary, 0.5);
+    outline-offset: 2px;
+  }
+}
+
+// Glass morphism effect
+@mixin glass-effect($opacity: 0.1, $blur: 20px) {
+  background: alpha-color($color-white, $opacity);
+  @include backdrop-blur($blur);
+  border: 1px solid alpha-color($color-white, 0.2);
 }
 
 // Full viewport overlay mixin
@@ -31,40 +185,211 @@
   z-index: 9999;
 }
 
-// Dropdown menu mixin
+// Dropdown menu mixin - 現代化
 @mixin dropdown-menu() {
   position: absolute;
   top: 100%;
   left: 0;
-  min-width: 180px;
+  min-width: 200px;
   background: $color-white;
-  border: 1px solid rgba($color-black, 0.1);
-  border-radius: 8px;
-  box-shadow: 0 4px 20px rgba($color-black, 0.1);
+  border: 1px solid $color-border-light;
+  border-radius: $radius-xl;
+  box-shadow: $shadow-xl;
   opacity: 0;
   visibility: hidden;
-  transform: translateY(-8px);
+  transform: translateY(-8px) scale(0.95);
   transition: all $transition-normal;
   z-index: $z-index-dropdown;
-  margin-top: 8px;
-  padding: $spacing-sm 0;
+  margin-top: $spacing-2;
+  padding: $spacing-2;
   list-style: none;
+
+  &.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0) scale(1);
+  }
 }
 
 // Menu link base styles
 @mixin menu-link-base() {
   text-decoration: none;
-  transition: all $transition-normal;
+  transition: all $transition-fast;
   display: inline-block;
+  border-radius: $radius-md;
 }
 
-// Common animations
+// Form input styles
+@mixin input-base() {
+  width: 100%;
+  padding: $spacing-3 $spacing-4;
+  border: 1px solid $color-border-medium;
+  border-radius: $radius-lg;
+  font-family: $font-family-primary;
+  font-size: $font-size-base;
+  background: $color-white;
+  transition: all $transition-fast;
+
+  &::placeholder {
+    color: $color-text-muted;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: $color-primary;
+    box-shadow: 0 0 0 3px alpha-color($color-primary, 0.1);
+  }
+
+  &:disabled {
+    background: $color-gray-50;
+    color: $color-text-muted;
+    cursor: not-allowed;
+  }
+}
+
+// Responsive mixins
+@mixin mobile() {
+  @media (max-width: #{$breakpoint-md - 1px}) {
+    @content;
+  }
+}
+
+@mixin tablet() {
+  @media (min-width: $breakpoint-md) and (max-width: #{$breakpoint-lg - 1px}) {
+    @content;
+  }
+}
+
+@mixin desktop() {
+  @media (min-width: $breakpoint-lg) {
+    @content;
+  }
+}
+
+@mixin large-desktop() {
+  @media (min-width: $breakpoint-xl) {
+    @content;
+  }
+}
+
+// Trading specific mixins
+@mixin price-display($color: $color-text-primary) {
+  @include mono-text();
+  color: $color;
+  font-weight: $font-weight-medium;
+
+  &.price-up {
+    color: $color-success;
+  }
+
+  &.price-down {
+    color: $color-danger;
+  }
+
+  &.price-neutral {
+    color: $color-text-secondary;
+  }
+}
+
+@mixin crypto-badge($bg-color: $color-primary, $text-color: $color-white) {
+  display: inline-flex;
+  align-items: center;
+  padding: $spacing-1 $spacing-3;
+  background: $bg-color;
+  color: $text-color;
+  border-radius: $radius-full;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-medium;
+  text-transform: uppercase;
+  letter-spacing: $letter-spacing-wide;
+}
+
+// Loading animations
+@mixin loading-shimmer() {
+  background: linear-gradient(
+    90deg,
+    rgba($color-gray-200, 0.8) 25%,
+    rgba($color-gray-300, 0.8) 50%,
+    rgba($color-gray-200, 0.8) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+@mixin loading-pulse() {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@mixin loading-spin() {
+  animation: spin 1s linear infinite;
+}
+
+// Utility mixins
+@mixin truncate() {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@mixin visually-hidden() {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@mixin clearfix() {
+  &::after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+}
+
+// Animation keyframes
 @keyframes shimmer {
   0% { background-position: -200% 0; }
   100% { background-position: 200% 0; }
 }
 
 @keyframes pulse {
-  0%, 100% { opacity: 0.6; }
-  50% { opacity: 1; }
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideInFromTop {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInFromBottom {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

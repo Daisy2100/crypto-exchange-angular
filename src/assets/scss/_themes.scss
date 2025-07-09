@@ -1,0 +1,221 @@
+@use 'sass:color';
+@use 'variables' as *;
+
+// 亮色主題變數
+$light-theme: (
+  // 背景色
+  'surface-0': $color-white,
+  'surface-50': $color-gray-50,
+  'surface-100': $color-gray-100,
+  'surface-200': $color-gray-200,
+  'surface-300': $color-gray-300,
+
+  // 文字色
+  'text-primary': $color-text-primary,
+  'text-secondary': $color-text-secondary,
+  'text-muted': $color-text-muted,
+  'text-inverse': $color-text-inverse,
+
+  // 邊框色
+  'border-light': $color-border-light,
+  'border-medium': $color-border-medium,
+  'border-dark': $color-border-dark,
+
+  // 主要色彩
+  'primary': $color-primary,
+  'primary-hover': $color-primary-700,
+  'success': $color-success,
+  'danger': $color-danger,
+  'warning': $color-warning,
+
+  // 陰影
+  'shadow-sm': $shadow-sm,
+  'shadow-md': $shadow-md,
+  'shadow-lg': $shadow-lg,
+  'shadow-xl': $shadow-xl,
+);
+
+// 暗色主題變數
+$dark-theme: (
+  // 背景色
+  'surface-0': $color-surface-dark-0,
+  'surface-50': $color-surface-dark-50,
+  'surface-100': $color-surface-dark-100,
+  'surface-200': $color-surface-dark-200,
+  'surface-300': $color-surface-dark-300,
+
+  // 文字色
+  'text-primary': $color-text-dark-primary,
+  'text-secondary': $color-text-dark-secondary,
+  'text-muted': $color-text-dark-muted,
+  'text-inverse': $color-gray-900,
+
+  // 邊框色
+  'border-light': $color-gray-700,
+  'border-medium': $color-gray-600,
+  'border-dark': $color-gray-500,
+
+  // 主要色彩 (暗色主題中稍微調亮)
+  'primary': $color-primary-400,
+  'primary-hover': $color-primary-300,
+  'success': $color-success-400,
+  'danger': $color-danger-400,
+  'warning': $color-warning-400,
+
+  // 陰影 (暗色主題中使用更深的陰影)
+  'shadow-sm': 0 1px 2px 0 rgba(0, 0, 0, 0.3),
+  'shadow-md': 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2),
+  'shadow-lg': 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2),
+  'shadow-xl': 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.2),
+);
+
+// 主題混入 - 生成 CSS 自定義屬性
+@mixin theme-variables($theme-map) {
+  @each $key, $value in $theme-map {
+    --#{$key}: #{$value};
+  }
+}
+
+// 亮色主題類別
+.theme-light {
+  @include theme-variables($light-theme);
+}
+
+// 暗色主題類別
+.theme-dark {
+  @include theme-variables($dark-theme);
+}
+
+// 根據系統偏好自動切換主題
+:root {
+  @include theme-variables($light-theme);
+
+  @media (prefers-color-scheme: dark) {
+    @include theme-variables($dark-theme);
+  }
+}
+
+// 強制亮色主題
+[data-theme="light"] {
+  @include theme-variables($light-theme);
+}
+
+// 強制暗色主題
+[data-theme="dark"] {
+  @include theme-variables($dark-theme);
+}
+
+// 主題切換動畫
+.theme-transition {
+  transition: background-color $transition-normal,
+              color $transition-normal,
+              border-color $transition-normal,
+              box-shadow $transition-normal;
+}
+
+// 使用 CSS 變數的工具函數
+@function theme-var($key) {
+  @return var(--#{$key});
+}
+
+// 交易相關的主題色彩
+$trading-theme: (
+  // 交易方向色彩
+  'bull-color': $color-success-500,
+  'bear-color': $color-danger-500,
+  'neutral-color': $color-gray-500,
+
+  // 圖表色彩
+  'chart-green': $color-success-400,
+  'chart-red': $color-danger-400,
+  'chart-blue': $color-primary-400,
+  'chart-yellow': $color-warning-400,
+  'chart-purple': #8b5cf6,
+  'chart-orange': #f97316,
+
+  // 交易介面色彩
+  'order-buy': $color-success-500,
+  'order-sell': $color-danger-500,
+  'order-pending': $color-warning-500,
+  'order-filled': $color-primary-500,
+  'order-cancelled': $color-gray-500,
+
+  // 加密貨幣品牌色
+  'bitcoin-color': $color-bitcoin,
+  'ethereum-color': $color-ethereum,
+  'crypto-gold': $color-accent-gold,
+  'crypto-silver': $color-accent-silver,
+);
+
+// 交易主題混入
+@mixin trading-theme-variables() {
+  @each $key, $value in $trading-theme {
+    --trading-#{$key}: #{$value};
+  }
+}
+
+// 應用交易主題變數
+:root {
+  @include trading-theme-variables();
+}
+
+// 特殊效果 - 霓虹燈效果（用於重要數據顯示）
+@mixin neon-glow($color: $color-primary-400, $intensity: 0.5) {
+  text-shadow:
+    0 0 5px rgba($color, $intensity),
+    0 0 10px rgba($color, $intensity * 0.8),
+    0 0 15px rgba($color, $intensity * 0.6),
+    0 0 20px rgba($color, $intensity * 0.4);
+}
+
+// 漸變背景混入
+@mixin gradient-bg($direction: 135deg, $colors...) {
+  background: linear-gradient($direction, $colors);
+}
+
+// 玻璃態效果混入
+@mixin glassmorphism($opacity: 0.1, $blur: 20px, $border-opacity: 0.2) {
+  background: alpha-color($color-white, $opacity);
+  backdrop-filter: blur($blur);
+  -webkit-backdrop-filter: blur($blur);
+  border: 1px solid alpha-color($color-white, $border-opacity);
+}
+
+// 加密貨幣價格顯示主題
+@mixin crypto-price-theme() {
+  &.price-up {
+    color: theme-var('trading-bull-color');
+    @include neon-glow($color-success-400, 0.3);
+  }
+
+  &.price-down {
+    color: theme-var('trading-bear-color');
+    @include neon-glow($color-danger-400, 0.3);
+  }
+
+  &.price-neutral {
+    color: theme-var('trading-neutral-color');
+  }
+}
+
+// 深色模式專用樣式
+@mixin dark-mode-only {
+  @media (prefers-color-scheme: dark) {
+    @content;
+  }
+
+  [data-theme="dark"] & {
+    @content;
+  }
+}
+
+// 亮色模式專用樣式
+@mixin light-mode-only {
+  @media (prefers-color-scheme: light) {
+    @content;
+  }
+
+  [data-theme="light"] & {
+    @content;
+  }
+}
