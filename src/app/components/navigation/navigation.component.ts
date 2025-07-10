@@ -9,11 +9,13 @@ import { SidebarModule } from 'primeng/sidebar';
 import { CommonModule } from '@angular/common';
 import { MenuItem } from 'primeng/api';
 import { NavigationService, NavigationItem } from './navigation.service';
+import { TranslatePipe } from '../../core/i18n/translate.pipe';
+import { I18nService } from '../../core/i18n/i18n.service';
 
 @Component({
     selector: 'app-navigation',
     standalone: true,
-    imports: [RouterModule, MenubarModule, BadgeModule, InputTextModule, AvatarModule, RippleModule, SidebarModule, CommonModule],
+    imports: [RouterModule, MenubarModule, BadgeModule, InputTextModule, AvatarModule, RippleModule, SidebarModule, CommonModule, TranslatePipe],
     templateUrl: './navigation.component.html',
     styleUrl: './navigation.component.scss'
 })
@@ -25,10 +27,18 @@ export class NavigationComponent implements OnInit {
     isLoading: boolean = true;
     sidebarVisible: boolean = false;
 
-    constructor(private navigationService: NavigationService) { }
+    constructor(
+        private navigationService: NavigationService,
+        private i18nService: I18nService
+    ) { }
 
     ngOnInit() {
         this.loadNavigationItems();
+
+        // 監聽語言變化
+        this.i18nService.currentLanguage$.subscribe(() => {
+            this.loadNavigationItems();
+        });
     }
 
     /**

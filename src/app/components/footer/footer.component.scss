@@ -135,6 +135,12 @@
       margin: 0;
     }
 
+    .footer-language-switcher {
+      display: flex;
+      align-items: center;
+      gap: $spacing-md;
+    }
+
     .footer-bottom-links {
       display: flex;
       align-items: center;

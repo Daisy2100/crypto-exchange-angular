@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { I18nService } from '../../core/i18n/i18n.service';
 
 export interface NavigationItem {
     id: string;
@@ -10,6 +12,7 @@ export interface NavigationItem {
     children?: NavigationItem[];
     hasChildren?: boolean;
     parentId?: string;
+    translationKey?: string;
 }
 
 @Injectable({
@@ -17,14 +20,46 @@ export interface NavigationItem {
 })
 export class NavigationService {
 
-    constructor() { }
+    constructor(private i18nService: I18nService) { }
     /**
      * 取得導航選單項目
      * @returns Observable<NavigationItem[]>
      */
     getNavigationItems(): Observable<NavigationItem[]> {
-        // 直接回傳預設的導航項目
-        return of(this.getDefaultNavigationItems());
+        return this.i18nService.translations$.pipe(
+            map(translations => {
+                const items = this.getDefaultNavigationItems();
+                return this.translateNavigationItems(items, translations);
+            })
+        );
+    }
+
+    /**
+     * 翻譯導航項目
+     * @param items NavigationItem[]
+     * @param translations 翻譯物件
+     * @returns NavigationItem[]
+     */
+    private translateNavigationItems(items: NavigationItem[], translations: any): NavigationItem[] {
+        return items.map(item => ({
+            ...item,
+            displayName: item.translationKey ?
+                this.getTranslation(translations, item.translationKey) || item.displayName :
+                item.displayName,
+            children: item.children ?
+                this.translateNavigationItems(item.children, translations) :
+                undefined
+        }));
+    }
+
+    /**
+     * 獲取翻譯值
+     * @param translations 翻譯物件
+     * @param key 翻譯鍵
+     * @returns string
+     */
+    private getTranslation(translations: any, key: string): string {
+        return key.split('.').reduce((obj, k) => obj && obj[k], translations);
     }    /**
      * 取得預設的導航項目
      * @returns NavigationItem[]
@@ -35,62 +70,69 @@ export class NavigationService {
                 id: 'home',
                 displayName: '首頁',
                 path: '/',
-                order: 0
+                order: 0,
+                translationKey: 'nav.home'
             },
             {
                 id: 'markets',
                 displayName: '市場',
                 path: '/markets',
-                order: 1
+                order: 1,
+                translationKey: 'nav.markets'
             },
             {
                 id: 'trading',
                 displayName: '交易',
                 path: '/trading',
                 order: 2,
+                translationKey: 'nav.trading',
                 children: [
                     {
                         id: 'trading-spot',
                         displayName: '現貨交易',
                         path: '/trading/spot',
                         order: 0,
-                        parentId: 'trading'
+                        parentId: 'trading',
+                        translationKey: 'nav.submenu.spot'
                     },
                     {
                         id: 'trading-futures',
                         displayName: '期貨交易',
                         path: '/trading/futures',
                         order: 1,
-                        parentId: 'trading'
+                        parentId: 'trading',
+                        translationKey: 'nav.submenu.futures'
                     },
                     {
                         id: 'trading-options',
                         displayName: '選擇權',
                         path: '/trading/options',
                         order: 2,
-                        parentId: 'trading'
+                        parentId: 'trading',
+                        translationKey: 'nav.submenu.options'
                     }
                 ]
             },
-
             {
                 id: 'wallet',
                 displayName: '錢包',
                 path: '/wallet',
-                order: 3
+                order: 3,
+                translationKey: 'nav.wallet'
             },
             {
                 id: 'about',
                 displayName: '關於我們',
                 path: '/about',
-                order: 4
+                order: 4,
+                translationKey: 'nav.about'
             },
-
             {
                 id: 'portfolio',
                 displayName: '登入',
                 path: '/portfolio',
-                order: 5
+                order: 5,
+                translationKey: 'nav.login'
             },
         ];
     }

@@ -1,0 +1,21 @@
+<div class="language-switcher-container">
+  <div class="language-switcher">
+    <div class="language-options">
+      <button
+        *ngFor="let lang of supportedLanguages; trackBy: trackByLanguage"
+        (click)="switchLanguage(lang.code)"
+        (keydown)="onKeyDown($event, lang.code)"
+        [class.active]="isCurrentLanguage(lang.code)"
+        class="language-option"
+        [attr.aria-label]="'Switch to ' + lang.name"
+        [attr.aria-pressed]="isCurrentLanguage(lang.code)"
+        [attr.title]="lang.name"
+        role="button"
+        tabindex="0">
+        <span class="language-flag" [attr.aria-hidden]="true">{{ lang.flag }}</span>
+        <span class="language-code">{{ getLanguageDisplayCode(lang.code) }}</span>
+      </button>
+    </div>
+    <div class="language-separator" aria-hidden="true">|</div>
+  </div>
+</div>
