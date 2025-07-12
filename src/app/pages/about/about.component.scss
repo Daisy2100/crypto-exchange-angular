@@ -1,10 +1,5 @@
 // 使用 Tailwind CSS 為主，僅保留必要的自定義樣式
 
-:host {
-    display: block;
-    position: relative;
-    overflow: hidden;
-}
 
 // 賽博龐克主要背景容器
 .cyber-background {
@@ -16,7 +11,6 @@
     background: #0a0a0a;
     z-index: -1;
     overflow: hidden;
-}
 
 // 動態網格背景
 .cyber-grid {
@@ -187,18 +181,15 @@
 
 // 交易卡片樣式 - 賽博龐克風格
 .card-trading {
-    padding: 1.5rem;
-    border-radius: 1rem;
     background: rgba(0, 0, 0, 0.8);
     border: 1px solid rgba(0, 255, 255, 0.3);
     box-shadow:
         0 0 20px rgba(0, 255, 255, 0.1),
         inset 0 1px 0 rgba(0, 255, 255, 0.1);
     backdrop-filter: blur(10px);
-    transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
-
+    /* padding, border-radius, transition, hover 狀態等請用 Tailwind 類別於 HTML 實現 */
     &::before {
         content: '';
         position: absolute;
@@ -212,14 +203,12 @@
                 transparent);
         transition: left 0.5s ease;
     }
-
     &:hover {
         border-color: rgba(0, 255, 255, 0.6);
         box-shadow:
             0 0 30px rgba(0, 255, 255, 0.2),
             inset 0 1px 0 rgba(0, 255, 255, 0.2);
         transform: translateY(-4px);
-
         &::before {
             left: 100%;
         }
@@ -228,23 +217,14 @@
 
 // 賽博龐克按鈕樣式
 .btn-crypto {
-    padding: 1rem 2rem;
-    border-radius: 1rem;
-    font-weight: 600;
-    color: #000;
     background: linear-gradient(135deg, #00ffff, #00ff00);
-    border: none;
-    cursor: pointer;
-    transition: all 0.2s ease;
     box-shadow:
         0 0 20px rgba(0, 255, 255, 0.3),
         inset 0 1px 0 rgba(255, 255, 255, 0.1);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
     font-family: 'Courier New', monospace;
     position: relative;
     overflow: hidden;
-
+    /* padding, border-radius, font-weight, color, text-transform, letter-spacing, cursor, transition, focus 狀態等請用 Tailwind 類別於 HTML 實現 */
     &::before {
         content: '';
         position: absolute;
@@ -256,20 +236,16 @@
         opacity: 0;
         transition: opacity 0.3s ease;
     }
-
     &:hover {
         box-shadow:
             0 0 30px rgba(0, 255, 255, 0.5),
             inset 0 1px 0 rgba(255, 255, 255, 0.2);
         transform: translateY(-1px);
-
         &::before {
             opacity: 1;
         }
     }
-
     &:focus {
-        outline: none;
         box-shadow:
             0 0 0 2px #00ffff,
             0 0 0 4px rgba(0, 255, 255, 0.3);
@@ -277,27 +253,19 @@
 }
 
 // 賽博龐克價格顏色
+// 賽博龐克價格顏色
 .price-up {
-    color: #00ff00;
-    font-family: 'Courier New', monospace;
     text-shadow: 0 0 10px #00ff00;
     animation: price-glow-green 2s ease-in-out infinite;
-}
-
-.price-down {
-    color: #ff0040;
     font-family: 'Courier New', monospace;
+    /* color 請用 Tailwind text-green-500 於 HTML 實現 */
+}
+.price-down {
     text-shadow: 0 0 10px #ff0040;
     animation: price-glow-red 2s ease-in-out infinite;
+    font-family: 'Courier New', monospace;
+    /* color 請用 Tailwind text-red-500 於 HTML 實現 */
 }
-
-// 賽博龐克網格背景效果
-.bg-grid-pattern {
-    background-image:
-        linear-gradient(rgba(0, 255, 255, 0.1) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0, 255, 255, 0.1) 1px, transparent 1px);
-    background-size: 50px 50px;
-    animation: grid-pulse 4s ease-in-out infinite;
 }
 
 // 更多賽博龐克粒子
@@ -520,20 +488,6 @@
     }
 }
 
-// 響應式設計
-@media (max-width: 768px) {
-    .cyber-background {
-        display: none; // 在手機上隱藏複雜背景以提升性能
-    }
-
-    .card-trading {
-        padding: 1rem;
-    }
-
-    .btn-crypto {
-        padding: 0.75rem 1.5rem;
-        font-size: 0.875rem;
-    }
-}
+// 響應式設計請盡量用 Tailwind 響應式類別於 HTML 實現
 
 // 其他所有樣式都使用 Tailwind CSS 類別實現

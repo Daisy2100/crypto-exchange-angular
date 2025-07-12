@@ -11,19 +11,19 @@
 
 ## 樣式開發優先級
 
-### 第一優先：Tailwind CSS 3.4
+### 第一優先：PrimeNG 元件
+
+1. 使用 **PrimeNG 元件**作為基礎 UI 元件
+2. 通過 Tailwind 類別來**覆蓋和擴展** PrimeNG 樣式
+3. 使用 PrimeNG 的 `styleClass` 屬性應用 Tailwind 類別
+
+### 第二優先：Tailwind CSS 3.4
 
 1. **優先使用 Tailwind CSS 類別**來實現所有樣式需求
 2. **響應式設計**使用 Tailwind 的斷點系統：`sm:`, `md:`, `lg:`, `xl:`, `2xl:`
 3. **顏色系統**使用 Tailwind 的顏色調色盤或自定義顏色
 4. **間距系統**使用 Tailwind 的 spacing scale（`p-4`, `m-6`, `space-x-2` 等）
 5. **佈局系統**使用 Tailwind 的 Flexbox 和 Grid 工具類別
-
-### 第二優先：PrimeNG 元件
-
-1. 使用 **PrimeNG 元件**作為基礎 UI 元件
-2. 通過 Tailwind 類別來**覆蓋和擴展** PrimeNG 樣式
-3. 使用 PrimeNG 的 `styleClass` 屬性應用 Tailwind 類別
 
 ### 第三優先：自定義 SCSS
 

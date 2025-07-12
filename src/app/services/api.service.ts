@@ -4,26 +4,26 @@ import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 
 @Injectable({
-  providedIn: 'root',
+    providedIn: 'root',
 })
 export class ApiService {
-  private baseUrl = environment.apiUrl;
+    private baseUrl = environment.apiUrl;
 
-  constructor(private http: HttpClient) {}
+    constructor(private http: HttpClient) { }
 
-  get<T>(endpoint: string, params?: any): Observable<T> {
-    return this.http.get<T>(`${this.baseUrl}/${endpoint}`, { params });
-  }
+    get<T>(endpoint: string, params?: any): Observable<T> {
+        return this.http.get<T>(`${this.baseUrl}/${endpoint}`, { params });
+    }
 
-  post<T>(endpoint: string, body: any): Observable<T> {
-    return this.http.post<T>(`${this.baseUrl}/${endpoint}`, body);
-  }
+    post<T>(endpoint: string, body: any): Observable<T> {
+        return this.http.post<T>(`${this.baseUrl}/${endpoint}`, body);
+    }
 
-  put<T>(endpoint: string, body: any): Observable<T> {
-    return this.http.put<T>(`${this.baseUrl}/${endpoint}`, body);
-  }
+    put<T>(endpoint: string, body: any): Observable<T> {
+        return this.http.put<T>(`${this.baseUrl}/${endpoint}`, body);
+    }
 
-  delete<T>(endpoint: string, params?: any): Observable<T> {
-    return this.http.delete<T>(`${this.baseUrl}/${endpoint}`, { params });
-  }
+    delete<T>(endpoint: string, params?: any): Observable<T> {
+        return this.http.delete<T>(`${this.baseUrl}/${endpoint}`, { params });
+    }
 }
