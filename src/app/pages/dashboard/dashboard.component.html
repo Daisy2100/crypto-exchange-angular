@@ -1,16 +1,16 @@
 <!-- Dashboard 主容器 -->
-<div class="container mx-auto px-4 py-6 space-y-6">
+<div class="space-y-6">
     <!-- 頂部統計卡片 - 使用 PrimeNG Card -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <!-- 總資產價值卡片 -->
         <p-card styleClass="!bg-gray-800 !border-gray-700 hover:!bg-gray-750 transition-all duration-300 shadow-lg">
             <div class="flex items-center justify-between p-2">
                 <div class="flex-1">
-                    <p class="text-gray-400 text-sm font-medium mb-1">總資產價值</p>
+                    <p class="text-gray-400 text-sm font-medium mb-1">{{ 'dashboard.totalAssetValue' | translate }}</p>
                     <p class="text-white text-xl font-bold mb-1">${{ totalAssetValue | number:'1.2-2' }}</p>
                     <p [ngClass]="{'text-green-400': dailyChange >= 0, 'text-red-400': dailyChange < 0}"
                        class="text-sm font-semibold">
-                        {{ dailyChange >= 0 ? '+' : '' }}{{ dailyChangePercent }}% (24h)
+                        {{ dailyChange >= 0 ? '+' : '' }}{{ dailyChangePercent }}% ({{ 'dashboard.24h' | translate }})
                     </p>
                 </div>
                 <div class="flex items-center justify-center w-16 h-16 rounded-full bg-yellow-500/20">
@@ -23,7 +23,7 @@
         <p-card styleClass="!bg-gray-800 !border-gray-700 hover:!bg-gray-750 transition-all duration-300 shadow-lg">
             <div class="flex items-center justify-between p-2">
                 <div class="flex-1">
-                    <p class="text-gray-400 text-sm font-medium mb-1">今日盈虧</p>
+                    <p class="text-gray-400 text-sm font-medium mb-1">{{ 'dashboard.dailyProfitLoss' | translate }}</p>
                     <p class="text-white text-xl font-bold mb-1">
                         {{ dailyProfitLoss >= 0 ? '+' : '' }}${{ dailyProfitLoss | number:'1.2-2' }}
                     </p>
@@ -43,9 +43,9 @@
         <p-card styleClass="!bg-gray-800 !border-gray-700 hover:!bg-gray-750 transition-all duration-300 shadow-lg">
             <div class="flex items-center justify-between p-2">
                 <div class="flex-1">
-                    <p class="text-gray-400 text-sm font-medium mb-1">持有幣種</p>
+                    <p class="text-gray-400 text-sm font-medium mb-1">{{ 'dashboard.totalCoins' | translate }}</p>
                     <p class="text-white text-xl font-bold mb-1">{{ totalCoins }}</p>
-                    <p class="text-blue-400 text-sm font-semibold">種加密貨幣</p>
+                    <p class="text-blue-400 text-sm font-semibold">{{ 'dashboard.cryptoTypes' | translate }}</p>
                 </div>
                 <div class="flex items-center justify-center w-16 h-16 rounded-full bg-blue-500/20">
                     <i class="pi pi-wallet text-blue-400 text-2xl"></i>
@@ -57,7 +57,7 @@
         <p-card styleClass="!bg-gray-800 !border-gray-700 hover:!bg-gray-750 transition-all duration-300 shadow-lg">
             <div class="flex items-center justify-between p-2">
                 <div class="flex-1">
-                    <p class="text-gray-400 text-sm font-medium mb-1">24h 交易量</p>
+                    <p class="text-gray-400 text-sm font-medium mb-1">{{ 'dashboard.24hVolume' | translate }}</p>
                     <p class="text-white text-xl font-bold mb-1">{{ tradingVolume }} BTC</p>
                     <p class="text-purple-400 text-sm font-semibold">${{ tradingVolumeUSD / 1000000 | number:'1.1-1' }}M USD</p>
                 </div>
@@ -85,12 +85,12 @@
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <!-- 投資組合分佈 -->
         <div class="lg:col-span-1">
-            <p-panel header="投資組合分佈"
+            <p-panel [header]="'dashboard.portfolioDistribution' | translate"
                      styleClass="!bg-gray-800 !border-gray-700 chart-panel shadow-lg">
                 <ng-template pTemplate="header">
                     <div class="flex items-center space-x-2">
                         <i class="pi pi-chart-pie text-purple-400"></i>
-                        <span class="text-white font-semibold">投資組合分佈</span>
+                        <span class="text-white font-semibold">{{ 'dashboard.portfolioDistribution' | translate }}</span>
                     </div>
                 </ng-template>
                 <div #portfolioChart class="w-full h-80"></div>
@@ -99,12 +99,12 @@
 
         <!-- 熱門加密貨幣 - 使用 PrimeNG DataView -->
         <div class="lg:col-span-2">
-            <p-panel header="熱門加密貨幣"
+            <p-panel [header]="'dashboard.hotCryptos' | translate"
                      styleClass="!bg-gray-800 !border-gray-700 shadow-lg">
                 <ng-template pTemplate="header">
                     <div class="flex items-center space-x-2">
                         <i class="pi pi-star text-yellow-400"></i>
-                        <span class="text-white font-semibold">熱門加密貨幣</span>
+                        <span class="text-white font-semibold">{{ 'dashboard.hotCryptos' | translate }}</span>
                     </div>
                 </ng-template>
                 <p-dataView [value]="cryptocurrencies" layout="list">

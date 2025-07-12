@@ -124,5 +124,36 @@
         "priceAlert": "Price Alert",
         "systemMaintenance": "System Maintenance",
         "tradingHalted": "Trading Halted"
+    },
+    "dashboard": {
+        "totalAssetValue": "Total Asset Value",
+        "24h": "24h",
+        "dailyProfitLoss": "Daily P/L",
+        "totalCoins": "Total Coins",
+        "cryptoTypes": "Crypto Types",
+        "24hVolume": "24h Volume",
+        "portfolioDistribution": "Portfolio Distribution",
+        "hotCryptos": "Hot Cryptos",
+        "portfolioAnalysis": "Portfolio Analysis",
+        "portfolio": "Portfolio",
+        "btcTrend": "Bitcoin Price Trend",
+        "price": "Price",
+        "volume": "Volume",
+        "asset": "Asset",
+        "tradeVolume": "Trade Volume",
+        "value": "Value",
+        "others": "Others",
+        "tradeVolumeTooltip": "{b}<br/>Volume: {c} BTC",
+        "priceTooltip": "{b}<br/>Price: ${c}"
     }
+  ,
+  "markets": {
+    "table": {
+      "tradingPair": "Trading Pair",
+      "price": "Price (USDT)",
+      "change24h": "24h Change",
+      "volume": "Volume",
+      "lastUpdated": "Last Updated:"
+    }
+  }
 }

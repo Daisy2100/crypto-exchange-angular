@@ -15,10 +15,10 @@
     </div>
 </div>
 
-<app-navigation ngSkipHydration class="mb-2"></app-navigation>
-<main class="text-white min-h-screen">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-12">
+<div class="text-white min-h-screen flex flex-col">
+    <app-navigation ngSkipHydration class="mb-2"></app-navigation>
+    <main class="max-w-screen  px-4 sm:px-6 lg:px-8 pt-6 pb-12 flex-1">
         <router-outlet></router-outlet>
-    </div>
-</main>
-<app-footer class="mt-12 px-4 sm:px-6 lg:px-8"></app-footer>
+    </main>
+    <app-footer class="mt-12"></app-footer>
+</div>

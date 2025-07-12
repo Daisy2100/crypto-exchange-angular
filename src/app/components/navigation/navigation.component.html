@@ -8,7 +8,7 @@
     </div>
 
     <!-- 手機版導航列 -->
-    <div *ngIf="!isLoading && isMobile" class="block md:hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div *ngIf="!isLoading && isMobile" class="block max-w-screen mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex items-center justify-between h-16">
             <!-- Logo -->
             <a routerLink="/"
@@ -35,7 +35,7 @@
 
     <!-- 桌面版 PrimeNG Menubar -->
     <div *ngIf="!isLoading && !isMobile">
-        <div class="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <div class="px-4 sm:px-6 lg:px-8 max-w-screen mx-auto">
             <p-menubar [model]="menuItems"
                        styleClass="custom-menubar">
 

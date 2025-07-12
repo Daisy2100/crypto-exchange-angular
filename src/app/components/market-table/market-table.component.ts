@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule, NgClass } from '@angular/common';
+import { TranslatePipe } from 'app/core/i18n/translate.pipe';
 import { TableModule } from 'primeng/table';
 import { ApiService } from 'app/services/api.service';
 import { apiMarkets } from 'app/api/api-markets';
@@ -17,7 +18,7 @@ interface Market {
     templateUrl: './market-table.component.html',
     styleUrls: ['./market-table.component.scss'],
     standalone: true,
-    imports: [CommonModule, NgClass, TableModule]
+    imports: [CommonModule, NgClass, TableModule, TranslatePipe]
 })
 
 export class MarketTableComponent implements OnInit, OnDestroy {

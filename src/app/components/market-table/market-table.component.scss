@@ -1,1 +1,48 @@
-/* 預留樣式區塊，優先使用 Tailwind，僅特殊需求才寫 SCSS */
+.neon-border {
+    box-shadow: 0 0 16px 2px #0ff, 0 0 32px 4px #a0f, 0 0 2px 1px #fff2;
+    border-radius: 1rem;
+}
+
+.neon-header {
+    text-shadow: 0 0 8px #0ff, 0 0 4px #a0f;
+    border-bottom-width: 2px !important;
+}
+
+.neon-row {
+    box-shadow: 0 0 12px 2px #0ff6, 0 0 24px 4px #a0f4;
+    transition: box-shadow 0.2s;
+}
+
+.neon-green-glow {
+    text-shadow: 0 0 8px #0ff, 0 0 4px #0f08;
+}
+
+.neon-red-glow {
+    text-shadow: 0 0 8px #f0f, 0 0 4px #f08;
+}
+
+.neon-footer {
+    text-shadow: 0 0 6px #0ff, 0 0 2px #a0f;
+}
+:host ::ng-deep .p-paginator .p-dropdown {
+  min-width: 80px;
+  width: 5rem;
+  font-size: 1rem;
+  background: #1e293b;
+  color: #22d3ee;
+  border-radius: 0.375rem;
+}
+:host ::ng-deep .dark .p-paginator .p-dropdown {
+  background: #0f172a !important;
+  color: #e879f9 !important;
+}
+.dark :host ::ng-deep .p-paginator .p-dropdown {
+  background: #0f172a;
+  color: #e879f9;
+}
+@media (prefers-color-scheme: dark) {
+  :host ::ng-deep .p-paginator .p-dropdown {
+    background: #0f172a;
+    color: #e879f9;
+  }
+}

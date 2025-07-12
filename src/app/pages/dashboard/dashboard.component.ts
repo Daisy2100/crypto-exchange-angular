@@ -4,6 +4,10 @@ import { CardModule } from 'primeng/card';
 import { PanelModule } from 'primeng/panel';
 import { DataViewModule } from 'primeng/dataview';
 import { AvatarModule } from 'primeng/avatar';
+import { TranslatePipe } from '../../core/i18n/translate.pipe';
+import { I18nService } from '../../core/i18n/i18n.service';
+import { Subscription } from 'rxjs';
+import { skip } from 'rxjs/operators';
 import * as echarts from 'echarts';
 
 // 介面定義
@@ -23,7 +27,8 @@ interface CryptoCurrency {
         CardModule,
         PanelModule,
         DataViewModule,
-        AvatarModule
+        AvatarModule,
+        TranslatePipe
     ],
     templateUrl: './dashboard.component.html',
     styleUrl: './dashboard.component.scss'
@@ -76,21 +81,101 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
         }
     ];
 
+
     private priceChartInstance: any;
     private volumeChartInstance: any;
     private portfolioChartInstance: any;
 
+    // 圖表用翻譯字串
+    chartI18n: any = {};
+    private chartI18nReady!: Promise<void>;
+    private languageSubscription?: Subscription;
+
+    constructor(private i18n: I18nService) {}
+
     ngOnInit() {
         // 初始化數據 - 可以從服務獲取
         this.loadDashboardData();
+        // 預先啟動 chartI18n 載入
+        this.chartI18nReady = this.loadChartI18n();
+    }
+
+    private async loadChartI18n(): Promise<void> {
+        // 確保等待當前語言完全載入
+        const currentLang = this.i18n.getCurrentLanguage();
+        console.log('Loading chart i18n for language:', currentLang);
+
+        // 等待一小段時間確保 I18nService 的翻譯檔案已載入
+        await new Promise(resolve => setTimeout(resolve, 100));
+
+        // 取得所有圖表用的翻譯字串
+        const keys = [
+            'dashboard.portfolioAnalysis',
+            'dashboard.portfolio',
+            'dashboard.btcTrend',
+            'dashboard.price',
+            'dashboard.24hVolume',
+            'dashboard.volume',
+            'dashboard.24h',
+            'dashboard.asset',
+            'dashboard.tradeVolume',
+            'dashboard.value',
+            'dashboard.others',
+            'dashboard.tradeVolumeTooltip',
+            'dashboard.priceTooltip',
+        ];
+
+        // 使用 Promise.all 確保所有翻譯同時載入
+        const translations = await Promise.all(
+            keys.map(key =>
+                new Promise<string>(resolve => {
+                    this.i18n.translate(key).subscribe(t => {
+                        console.log(`Loaded translation for ${key}: ${t}`);
+                        resolve(t);
+                    });
+                })
+            )
+        );
+
+        // 建立結果物件
+        const result: any = {};
+        keys.forEach((key, index) => {
+            result[key] = translations[index];
+        });
+
+        this.chartI18n = result;
+        console.log('Chart i18n loaded:', this.chartI18n);
     }
 
     ngAfterViewInit() {
-        // 視圖初始化完成後初始化圖表
-        this.initChartsWhenReady();
+        // View 初始化完成後，等 chartI18n 載入完成才初始化圖表
+        this.chartI18nReady.then(() => {
+            this.initChartsWhenReady();
+        });
+
+        // 僅訂閱語言切換事件（跳過初始值）
+        this.languageSubscription = this.i18n.currentLanguage$
+            .pipe(skip(1)) // 跳過初始值，只監聽真正的語言切換
+            .subscribe(async (newLang) => {
+                console.log('Language switching detected to:', newLang);
+
+                // 等待語言切換完全完成
+                await new Promise(resolve => setTimeout(resolve, 200));
+
+                console.log('Reloading chart i18n...');
+                // 確保語言切換是原子操作
+                await (this.chartI18nReady = this.loadChartI18n());
+                console.log('Chart i18n reloaded, reinitializing charts...');
+                this.reinitializeCharts();
+            });
     }
 
     ngOnDestroy() {
+        // 清理語言切換訂閱
+        if (this.languageSubscription) {
+            this.languageSubscription.unsubscribe();
+        }
+
         // 清理事件監聽器
         window.removeEventListener('resize', this.handleResize);
         if (this.priceChartInstance) {
@@ -242,16 +327,17 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
             prices.push(Math.round(price));
         }
 
+        const t = this.chartI18n;
         const option = {
             title: {
-                text: 'Bitcoin 價格走勢',
+                text: t['dashboard.btcTrend'] || 'Bitcoin 價格走勢',
                 textStyle: { color: '#ffffff' },
                 left: 'left',
                 top: 'top'
             },
             tooltip: {
                 trigger: 'axis',
-                formatter: '{b}<br/>價格: ${c}',
+                formatter: t['dashboard.priceTooltip'] || '{b}<br/>價格: ${c}',
                 backgroundColor: 'rgba(0, 0, 0, 0.8)',
                 textStyle: { color: '#ffffff' }
             },
@@ -310,16 +396,17 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
             });
         }
 
+        const t = this.chartI18n;
         const option = {
             title: {
-                text: '24小時交易量',
+                text: t['dashboard.24hVolume'] || '24小時交易量',
                 textStyle: { color: '#ffffff' },
                 left: 'left',
                 top: 'top'
             },
             tooltip: {
                 trigger: 'axis',
-                formatter: '{b}<br/>交易量: {c} BTC',
+                formatter: t['dashboard.tradeVolumeTooltip'] || '{b}<br/>交易量: {c} BTC',
                 backgroundColor: 'rgba(0, 0, 0, 0.8)',
                 textStyle: { color: '#ffffff' }
             },
@@ -368,17 +455,18 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     private initPortfolioChart() {
         this.portfolioChartInstance = echarts.init(this.portfolioChart.nativeElement);
 
+        const t = this.chartI18n;
         const portfolioData = [
             { value: 1048, name: 'Bitcoin (BTC)' },
             { value: 735, name: 'Ethereum (ETH)' },
             { value: 580, name: 'Cardano (ADA)' },
             { value: 484, name: 'Polkadot (DOT)' },
-            { value: 300, name: 'Others' }
+            { value: 300, name: t['dashboard.others'] || 'Others' }
         ];
 
         const option = {
             title: {
-                text: '投資組合分析',
+                text: t['dashboard.portfolioAnalysis'] || '投資組合分析',
                 textStyle: { color: '#ffffff' },
                 left: 'center',
                 top: 'top'
@@ -399,7 +487,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
             },
             series: [
                 {
-                    name: '投資組合',
+                    name: t['dashboard.portfolio'] || '投資組合',
                     type: 'pie',
                     radius: ['40%', '70%'],
                     center: ['60%', '55%'],
