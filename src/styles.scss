@@ -2,11 +2,6 @@
 @use 'assets/scss/_variables' as *;
 @use 'assets/scss/_mixins' as *;
 
-/* 導入 Tailwind CSS */
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 /* 全域樣式重置和基礎設定 */
 *,
 *::before,

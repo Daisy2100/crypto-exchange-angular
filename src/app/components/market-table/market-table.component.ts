@@ -1,12 +1,9 @@
-
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
-import { CommonModule } from '@angular/common';
-import { MarketTableComponent } from 'app/components/market-table/market-table.component';
-import { apiMarkets } from 'app/api/api-markets';
-import { AuthHttpService } from 'app/auth/auth-http.service';
+import { CommonModule, NgClass } from '@angular/common';
+import { TableModule } from 'primeng/table';
 import { ApiService } from 'app/services/api.service';
+import { apiMarkets } from 'app/api/api-markets';
 
 interface Market {
     market_name: string;
@@ -16,26 +13,21 @@ interface Market {
 }
 
 @Component({
-    selector: 'app-markets',
-    templateUrl: './markets.component.html',
-    styleUrls: ['./markets.component.scss'],
+    selector: 'app-market-table',
+    templateUrl: './market-table.component.html',
+    styleUrls: ['./market-table.component.scss'],
     standalone: true,
-    imports: [CommonModule, MarketTableComponent]
+    imports: [CommonModule, NgClass, TableModule]
 })
 
-export class MarketsComponent implements OnInit, OnDestroy {
-    $isLoadingSubscription = new Subscription();
-
+export class MarketTableComponent implements OnInit, OnDestroy {
     markets: Market[] = [];
     loading = false;
     error: string | null = null;
     refreshInterval: any;
     lastUpdated: string = '';
 
-    constructor(
-        private router: Router,
-        private ApiService: ApiService,
-    ) { }
+    constructor(private router: Router, private apiService: ApiService) { }
 
     ngOnInit() {
         this.fetchMarketData();
@@ -46,30 +38,26 @@ export class MarketsComponent implements OnInit, OnDestroy {
         if (this.refreshInterval) {
             clearInterval(this.refreshInterval);
         }
-        this.$isLoadingSubscription.unsubscribe();
     }
 
     fetchMarketData() {
         this.loading = true;
         this.error = null;
-
-        this.$isLoadingSubscription.add(
-            this.ApiService.get(apiMarkets.market).subscribe({
-                next: (response: any) => {
-                    if (response?.code === '0000000') {
-                        this.markets = response.data;
-                        this.lastUpdated = new Date().toLocaleTimeString();
-                    } else {
-                        this.error = response?.message || 'Failed to fetch market data';
-                    }
-                    this.loading = false;
-                },
-                error: (err) => {
-                    this.error = err?.error?.message || err.message || 'Network error occurred';
-                    this.loading = false;
+        this.apiService.get(apiMarkets.market).subscribe({
+            next: (response: any) => {
+                if (response?.code === '0000000') {
+                    this.markets = response.data;
+                    this.lastUpdated = new Date().toLocaleTimeString();
+                } else {
+                    this.error = response?.message || 'Failed to fetch market data';
                 }
-            })
-        )
+                this.loading = false;
+            },
+            error: (err: any) => {
+                this.error = err?.error?.message || err.message || 'Network error occurred';
+                this.loading = false;
+            }
+        });
     }
 
     startAutoRefresh() {
@@ -100,15 +88,9 @@ export class MarketsComponent implements OnInit, OnDestroy {
     }
 
     selectMarket(event: any) {
-        // PrimeNG 19: event 可能是 Market | Market[] | undefined
         const market = Array.isArray(event) ? event[0] : event;
         if (market && market.market_name) {
             this.router.navigate(['/markets', market.market_name]);
         }
-    }
-
-    // PrimeNG 19+ onRowSelect 事件直接傳 rowData
-    onRowSelect(event: any) {
-        this.selectMarket(event);
     }
 }

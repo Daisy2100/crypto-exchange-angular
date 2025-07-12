@@ -1,30 +1,227 @@
 import { Component, OnInit, AfterViewInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { CardModule } from 'primeng/card';
+import { PanelModule } from 'primeng/panel';
+import { DataViewModule } from 'primeng/dataview';
+import { AvatarModule } from 'primeng/avatar';
 import * as echarts from 'echarts';
+
+// 介面定義
+interface CryptoCurrency {
+    name: string;
+    symbol: string;
+    price: number;
+    change: number;
+    color: string;
+}
 
 @Component({
     selector: 'app-dashboard',
     standalone: true,
-    imports: [],
+    imports: [
+        CommonModule,
+        CardModule,
+        PanelModule,
+        DataViewModule,
+        AvatarModule
+    ],
     templateUrl: './dashboard.component.html',
     styleUrl: './dashboard.component.scss'
 })
 export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
+
     @ViewChild('priceChart', { static: false }) priceChart!: ElementRef;
     @ViewChild('volumeChart', { static: false }) volumeChart!: ElementRef;
     @ViewChild('portfolioChart', { static: false }) portfolioChart!: ElementRef;
+
+    // 統計卡片數據
+    totalAssetValue: number = 127543.21;
+    dailyChange: number = 5.67;
+    dailyChangePercent: string = '5.67';
+    dailyProfitLoss: number = 2847.35;
+    dailyProfitLossPercent: string = '2.28';
+    totalCoins: number = 12;
+    tradingVolume: string = '458.7';
+    tradingVolumeUSD: number = 29400000;
+
+    // 加密貨幣數據
+    cryptocurrencies: CryptoCurrency[] = [
+        {
+            name: 'Bitcoin',
+            symbol: '₿',
+            price: 65234.56,
+            change: 2.45,
+            color: '#f59e0b'
+        },
+        {
+            name: 'Ethereum',
+            symbol: 'Ξ',
+            price: 3847.92,
+            change: 1.23,
+            color: '#3b82f6'
+        },
+        {
+            name: 'Cardano',
+            symbol: '₳',
+            price: 0.8453,
+            change: -0.87,
+            color: '#10b981'
+        },
+        {
+            name: 'Polkadot',
+            symbol: '●',
+            price: 12.67,
+            change: 3.45,
+            color: '#8b5cf6'
+        }
+    ];
 
     private priceChartInstance: any;
     private volumeChartInstance: any;
     private portfolioChartInstance: any;
 
     ngOnInit() {
-        // 初始化數據
+        // 初始化數據 - 可以從服務獲取
+        this.loadDashboardData();
     }
 
     ngAfterViewInit() {
-        this.initPriceChart();
-        this.initVolumeChart();
-        this.initPortfolioChart();
+        // 視圖初始化完成後初始化圖表
+        this.initChartsWhenReady();
+    }
+
+    ngOnDestroy() {
+        // 清理事件監聽器
+        window.removeEventListener('resize', this.handleResize);
+        if (this.priceChartInstance) {
+            this.priceChartInstance.dispose();
+        }
+        if (this.volumeChartInstance) {
+            this.volumeChartInstance.dispose();
+        }
+        if (this.portfolioChartInstance) {
+            this.portfolioChartInstance.dispose();
+        }
+    }
+
+    /**
+     * 等待 DOM 元素準備就緒後初始化圖表
+     */
+    private initChartsWhenReady() {
+        // 使用 Promise 來處理多個圖表的初始化
+        const initChart = (elementRef: ElementRef, initFunction: () => void): Promise<void> => {
+            return new Promise((resolve) => {
+                const checkAndInit = () => {
+                    if (elementRef?.nativeElement) {
+                        const element = elementRef.nativeElement;
+                        // 檢查元素是否有正確的尺寸
+                        if (element.clientWidth > 0 && element.clientHeight > 0) {
+                            try {
+                                initFunction();
+                                resolve();
+                            } catch (error) {
+                                console.error('Chart initialization error:', error);
+                                resolve(); // 即使出錯也要 resolve，避免阻塞
+                            }
+                        } else {
+                            // 如果尺寸還是 0，再等待一段時間
+                            setTimeout(checkAndInit, 50);
+                        }
+                    } else {
+                        // 如果元素還不存在，再等待一段時間
+                        setTimeout(checkAndInit, 50);
+                    }
+                };
+
+                // 初始延遲確保 PrimeNG 組件完全渲染
+                setTimeout(checkAndInit, 200);
+            });
+        };
+
+        // 按順序初始化所有圖表
+        Promise.all([
+            initChart(this.priceChart, () => this.initPriceChart()),
+            initChart(this.volumeChart, () => this.initVolumeChart()),
+            initChart(this.portfolioChart, () => this.initPortfolioChart())
+        ]).then(() => {
+            console.log('All charts initialized successfully');
+            // 設置響應式處理
+            this.setupResizeHandling();
+        }).catch(error => {
+            console.error('Chart initialization failed:', error);
+        });
+    }
+
+    /**
+     * 載入儀表板數據
+     */
+    private loadDashboardData() {
+        // 這裡可以從 API 服務獲取真實數據
+        // 目前使用模擬數據
+        console.log('Dashboard data loaded');
+    }
+
+
+
+    /**
+     * 設置響應式處理
+     */
+    private setupResizeHandling() {
+        window.addEventListener('resize', this.handleResize);
+    }
+
+    /**
+     * 處理視窗大小變化
+     */
+    private handleResize = () => {
+        setTimeout(() => {
+            this.priceChartInstance?.resize();
+            this.volumeChartInstance?.resize();
+            this.portfolioChartInstance?.resize();
+        }, 100);
+    }
+
+    /**
+     * 手動觸發圖表重新初始化
+     */
+    reinitializeCharts() {
+        // 清理現有圖表
+        if (this.priceChartInstance) {
+            this.priceChartInstance.dispose();
+            this.priceChartInstance = null;
+        }
+        if (this.volumeChartInstance) {
+            this.volumeChartInstance.dispose();
+            this.volumeChartInstance = null;
+        }
+        if (this.portfolioChartInstance) {
+            this.portfolioChartInstance.dispose();
+            this.portfolioChartInstance = null;
+        }
+
+        // 重新初始化
+        setTimeout(() => {
+            this.initChartsWhenReady();
+        }, 100);
+    }
+
+    /**
+     * 更新統計數據
+     */
+    updateDashboardData() {
+        // 模擬數據更新
+        this.totalAssetValue = 127543.21 + (Math.random() - 0.5) * 5000;
+        this.dailyChange = (Math.random() - 0.5) * 10;
+        this.dailyChangePercent = this.dailyChange.toFixed(2);
+        this.dailyProfitLoss = (Math.random() - 0.5) * 3000;
+        this.dailyProfitLossPercent = (this.dailyProfitLoss / this.totalAssetValue * 100).toFixed(2);
+
+        // 更新加密貨幣價格
+        this.cryptocurrencies = this.cryptocurrencies.map(crypto => ({
+            ...crypto,
+            price: crypto.price * (1 + (Math.random() - 0.5) * 0.1),
+            change: (Math.random() - 0.5) * 10
+        }));
     }
 
     private initPriceChart() {
@@ -48,46 +245,54 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
         const option = {
             title: {
                 text: 'Bitcoin 價格走勢',
-                textStyle: { color: '#ffffff' }
+                textStyle: { color: '#ffffff' },
+                left: 'left',
+                top: 'top'
             },
             tooltip: {
                 trigger: 'axis',
-                formatter: '{b}<br/>價格: ${c}'
+                formatter: '{b}<br/>價格: ${c}',
+                backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                textStyle: { color: '#ffffff' }
             },
             xAxis: {
                 type: 'category',
                 data: dates,
-                axisLabel: { color: '#ffffff' },
-                axisLine: { lineStyle: { color: '#ffffff' } }
+                axisLabel: { color: '#9ca3af', fontSize: 12 },
+                axisLine: { lineStyle: { color: '#374151' } },
+                axisTick: { show: false }
             },
             yAxis: {
                 type: 'value',
                 axisLabel: {
-                    color: '#ffffff',
-                    formatter: '${value}'
+                    color: '#9ca3af',
+                    formatter: '${value}',
+                    fontSize: 12
                 },
-                axisLine: { lineStyle: { color: '#ffffff' } },
-                splitLine: { lineStyle: { color: '#333333' } }
+                axisLine: { show: false },
+                axisTick: { show: false },
+                splitLine: { lineStyle: { color: '#374151', type: 'dashed' } }
             },
             series: [{
                 data: prices,
                 type: 'line',
                 smooth: true,
-                lineStyle: { color: '#10b981', width: 2 },
+                lineStyle: { color: '#10b981', width: 3 },
                 itemStyle: { color: '#10b981' },
                 areaStyle: {
                     color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                        { offset: 0, color: 'rgba(16, 185, 129, 0.3)' },
-                        { offset: 1, color: 'rgba(16, 185, 129, 0.1)' }
+                        { offset: 0, color: 'rgba(16, 185, 129, 0.2)' },
+                        { offset: 1, color: 'rgba(16, 185, 129, 0.05)' }
                     ])
-                }
+                },
+                symbol: 'none'
             }],
             backgroundColor: 'transparent',
             grid: {
-                left: '10%',
-                right: '10%',
+                left: '8%',
+                right: '8%',
                 bottom: '15%',
-                top: '15%'
+                top: '20%'
             }
         };
 
@@ -108,26 +313,33 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
         const option = {
             title: {
                 text: '24小時交易量',
-                textStyle: { color: '#ffffff' }
+                textStyle: { color: '#ffffff' },
+                left: 'left',
+                top: 'top'
             },
             tooltip: {
                 trigger: 'axis',
-                formatter: '{b}<br/>交易量: {c} BTC'
+                formatter: '{b}<br/>交易量: {c} BTC',
+                backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                textStyle: { color: '#ffffff' }
             },
             xAxis: {
                 type: 'category',
                 data: volumeData.map(item => item.name),
-                axisLabel: { color: '#ffffff' },
-                axisLine: { lineStyle: { color: '#ffffff' } }
+                axisLabel: { color: '#9ca3af', fontSize: 12 },
+                axisLine: { lineStyle: { color: '#374151' } },
+                axisTick: { show: false }
             },
             yAxis: {
                 type: 'value',
                 axisLabel: {
-                    color: '#ffffff',
-                    formatter: '{value} BTC'
+                    color: '#9ca3af',
+                    formatter: '{value} BTC',
+                    fontSize: 12
                 },
-                axisLine: { lineStyle: { color: '#ffffff' } },
-                splitLine: { lineStyle: { color: '#333333' } }
+                axisLine: { show: false },
+                axisTick: { show: false },
+                splitLine: { lineStyle: { color: '#374151', type: 'dashed' } }
             },
             series: [{
                 data: volumeData.map(item => item.value),
@@ -136,15 +348,17 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
                     color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
                         { offset: 0, color: '#3b82f6' },
                         { offset: 1, color: '#1e40af' }
-                    ])
-                }
+                    ]),
+                    borderRadius: [2, 2, 0, 0]
+                },
+                barWidth: '60%'
             }],
             backgroundColor: 'transparent',
             grid: {
-                left: '10%',
-                right: '10%',
+                left: '8%',
+                right: '8%',
                 bottom: '15%',
-                top: '15%'
+                top: '20%'
             }
         };
 
@@ -164,23 +378,31 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
         const option = {
             title: {
-                text: '投資組合分佈',
-                textStyle: { color: '#ffffff' }
+                text: '投資組合分析',
+                textStyle: { color: '#ffffff' },
+                left: 'center',
+                top: 'top'
             },
             tooltip: {
                 trigger: 'item',
-                formatter: '{a} <br/>{b}: ${c} ({d}%)'
+                formatter: '{a} <br/>{b}: ${c} ({d}%)',
+                backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                textStyle: { color: '#ffffff' }
             },
             legend: {
                 orient: 'vertical',
                 left: 'left',
-                textStyle: { color: '#ffffff' }
+                top: 'middle',
+                textStyle: { color: '#9ca3af', fontSize: 12 },
+                itemGap: 10,
+                icon: 'circle'
             },
             series: [
                 {
                     name: '投資組合',
                     type: 'pie',
-                    radius: '50%',
+                    radius: ['40%', '70%'],
+                    center: ['60%', '55%'],
                     data: portfolioData,
                     emphasis: {
                         itemStyle: {
@@ -190,10 +412,19 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
                         }
                     },
                     itemStyle: {
-                        color: function(params: any) {
+                        borderRadius: 5,
+                        borderColor: '#1f2937',
+                        borderWidth: 2,
+                        color: function (params: any) {
                             const colors = ['#f59e0b', '#3b82f6', '#10b981', '#8b5cf6', '#ef4444'];
                             return colors[params.dataIndex % colors.length];
                         }
+                    },
+                    label: {
+                        show: false
+                    },
+                    labelLine: {
+                        show: false
                     }
                 }
             ],
@@ -201,17 +432,5 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
         };
 
         this.portfolioChartInstance.setOption(option);
-    }
-
-    ngOnDestroy() {
-        if (this.priceChartInstance) {
-            this.priceChartInstance.dispose();
-        }
-        if (this.volumeChartInstance) {
-            this.volumeChartInstance.dispose();
-        }
-        if (this.portfolioChartInstance) {
-            this.portfolioChartInstance.dispose();
-        }
     }
 }

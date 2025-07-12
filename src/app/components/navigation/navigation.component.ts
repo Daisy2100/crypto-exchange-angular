@@ -6,6 +6,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { AvatarModule } from 'primeng/avatar';
 import { RippleModule } from 'primeng/ripple';
 import { SidebarModule } from 'primeng/sidebar';
+import { ButtonModule } from 'primeng/button';
 import { CommonModule } from '@angular/common';
 import { MenuItem } from 'primeng/api';
 import { NavigationService, NavigationItem } from './navigation.service';
@@ -15,12 +16,14 @@ import { I18nService } from '../../core/i18n/i18n.service';
 @Component({
     selector: 'app-navigation',
     standalone: true,
-    imports: [RouterModule, MenubarModule, BadgeModule, InputTextModule, AvatarModule, RippleModule, SidebarModule, CommonModule, TranslatePipe],
+    imports: [RouterModule, MenubarModule, BadgeModule, InputTextModule, AvatarModule, RippleModule, SidebarModule, ButtonModule, CommonModule, TranslatePipe],
     templateUrl: './navigation.component.html',
     styleUrl: './navigation.component.scss'
 })
 
 export class NavigationComponent implements OnInit, OnDestroy {
+    isMobile: boolean = false;
+    private resizeListener: (() => void) | null = null;
     @Input() logoText: string = 'CryptoExchange'; // 可自定義的 Logo 文字
 
     menuItems: MenuItem[] = [];
@@ -45,20 +48,32 @@ export class NavigationComponent implements OnInit, OnDestroy {
         this.i18nService.currentLanguage$.subscribe(() => {
             this.loadNavigationItems();
         });
+
+        // 初始化 isMobile 狀態
+        this.updateIsMobile();
+        this.resizeListener = () => this.updateIsMobile();
+        window.addEventListener('resize', this.resizeListener);
     }
 
     ngOnDestroy() {
-        // 清理定時器
-        if (this.hideTimeout) {
-            clearTimeout(this.hideTimeout);
-            this.hideTimeout = null;
-        }
-
         // 清理動畫定時器
         if (this.animationInterval) {
             clearInterval(this.animationInterval);
             this.animationInterval = null;
         }
+
+        // 移除 resize 監聽
+        if (this.resizeListener) {
+            window.removeEventListener('resize', this.resizeListener);
+            this.resizeListener = null;
+        }
+    }
+
+    /**
+     * 根據螢幕寬度更新 isMobile 狀態
+     */
+    updateIsMobile() {
+        this.isMobile = window.innerWidth < 960;
     }
 
     /**
@@ -88,13 +103,22 @@ export class NavigationComponent implements OnInit, OnDestroy {
      * 將 NavigationItem 轉換為 PrimeNG MenuItem
      */
     private convertToMenuItems(items: NavigationItem[]): MenuItem[] {
-        return items.map(item => ({
-            id: item.id,
-            label: item.displayName,
-            routerLink: item.path,
-            items: item.children ? this.convertToMenuItems(item.children) : undefined,
-            styleClass: item.isActive ? 'active' : ''
-        }));
+        return items.map(item => {
+            const menuItem: MenuItem = {
+                id: item.id,
+                label: item.displayName,
+                routerLink: item.path,
+                styleClass: item.isActive ? 'p-menuitem-link-active' : '',
+                items: item.children ? this.convertToMenuItems(item.children) : undefined
+            };
+
+            // 如果有子項目，移除 routerLink，讓它作為下拉選單
+            if (item.children && item.children.length > 0) {
+                delete menuItem.routerLink;
+            }
+
+            return menuItem;
+        });
     }
 
     /**
@@ -131,38 +155,6 @@ export class NavigationComponent implements OnInit, OnDestroy {
     hasChildren(item: NavigationItem): boolean {
         return this.navigationService.hasChildren(item);
     }
-
-    /**
-     * 滑鼠進入事件處理器
-     */
-    onMouseEnter(item: NavigationItem) {
-        // 清除任何待執行的隱藏延遲
-        if (this.hideTimeout) {
-            clearTimeout(this.hideTimeout);
-            this.hideTimeout = null;
-        }
-
-        // 設置展開狀態
-        this.navigationItems.forEach(navItem => {
-            if (navItem.id === item.id) {
-                navItem.isExpanded = true;
-            } else {
-                navItem.isExpanded = false;
-            }
-        });
-    }
-
-    /**
-     * 滑鼠離開事件處理器
-     */
-    onMouseLeave(item: NavigationItem) {
-        // 延遲隱藏下拉選單，防止快速移動時閃爍
-        this.hideTimeout = setTimeout(() => {
-            item.isExpanded = false;
-        }, 300);
-    }
-
-    private hideTimeout: any = null;
 
     /**
      * 啟動賽博龐克動畫效果

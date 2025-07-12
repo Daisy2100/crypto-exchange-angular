@@ -37,8 +37,9 @@
                             }
                         ],
                         "styles": [
-                            "src/assets/styles.scss",
+                            "src/styles.css",
                             "src/styles.scss",
+                            "src/assets/styles.scss",
                             "node_modules/primeicons/primeicons.css"
                         ],
                         "stylePreprocessorOptions": {
@@ -109,8 +110,9 @@
                             }
                         ],
                         "styles": [
-                            "src/assets/styles.scss",
+                            "src/styles.css",
                             "src/styles.scss",
+                            "src/assets/styles.scss",
                             "node_modules/primeicons/primeicons.css"
                         ],
                         "stylePreprocessorOptions": {

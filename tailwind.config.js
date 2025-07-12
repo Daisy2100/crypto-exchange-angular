@@ -1,8 +1,10 @@
 /** @type {import('tailwindcss').Config} */
+import PrimeUI from 'tailwindcss-primeui';
 module.exports = {
     content: [
         "./src/**/*.{html,ts,scss}",
         "./src/**/*.component.html",
+        "./src/**/*.component.ts",
     ],
     darkMode: 'class', // 支援暗色主題
     theme: {
@@ -236,6 +238,7 @@ module.exports = {
         },
     },
     plugins: [
+        PrimeUI,
         // 自定義插件
         function({ addUtilities, addComponents, theme }) {
             // 自定義工具類別
