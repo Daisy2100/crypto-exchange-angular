@@ -11,15 +11,15 @@ import { MenuItem } from 'primeng/api';
 import { NavigationService, NavigationItem } from './navigation.service';
 import { TranslatePipe } from '../../core/i18n/translate.pipe';
 import { I18nService } from '../../core/i18n/i18n.service';
-import { LanguageSwitcherComponent } from '../../core/components/language-switcher.component';
 
 @Component({
     selector: 'app-navigation',
     standalone: true,
-    imports: [RouterModule, MenubarModule, BadgeModule, InputTextModule, AvatarModule, RippleModule, SidebarModule, CommonModule, TranslatePipe, LanguageSwitcherComponent],
+    imports: [RouterModule, MenubarModule, BadgeModule, InputTextModule, AvatarModule, RippleModule, SidebarModule, CommonModule, TranslatePipe],
     templateUrl: './navigation.component.html',
     styleUrl: './navigation.component.scss'
 })
+
 export class NavigationComponent implements OnInit, OnDestroy {
     @Input() logoText: string = 'CryptoExchange'; // 可自定義的 Logo 文字
 

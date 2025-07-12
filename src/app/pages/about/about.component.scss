@@ -1,81 +1,539 @@
-@use '../../../assets/scss/_variables' as *;
+// 使用 Tailwind CSS 為主，僅保留必要的自定義樣式
 
-.about-container {
-  min-height: 100vh;
-  font-family: $font-family-primary;
+:host {
+    display: block;
+    position: relative;
+    overflow: hidden;
 }
 
-.about-hero {
-  padding: 8rem 2rem 4rem;
-  background: linear-gradient(to bottom, #f8fafc, #ffffff);
-  text-align: center;
-
-  .hero-content {
-    max-width: 1280px;
-    margin: 0 auto;
-  }
-
-  .about-title {
-    font-size: clamp(2.5rem, 6vw, 4rem);
-    font-weight: $font-weight-light;
-    color: $color-gray-900;
-    margin-bottom: 1rem;
-    letter-spacing: $letter-spacing-wide;
-  }
-
-  .about-subtitle {
-    font-size: 1.25rem;
-    color: $color-gray-600;
-    font-weight: $font-weight-normal;
-  }
+// 賽博龐克主要背景容器
+.cyber-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #0a0a0a;
+    z-index: -1;
+    overflow: hidden;
 }
 
-.about-content {
-  padding: 4rem 2rem;
+// 動態網格背景
+.cyber-grid {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image:
+        linear-gradient(rgba(0, 255, 255, 0.1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 255, 255, 0.1) 1px, transparent 1px);
+    background-size: 50px 50px;
+    animation: grid-move 20s linear infinite;
+}
 
-  .content-wrapper {
-    max-width: 800px;
-    margin: 0 auto;
-  }
+// 霓虹粒子效果
+.cyber-particles {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
 
-  .about-section {
-    margin-bottom: 3rem;
-
-    h2 {
-      font-size: 1.875rem;
-      font-weight: $font-weight-semibold;
-      color: $color-gray-900;
-      margin-bottom: 1rem;
-      letter-spacing: $letter-spacing-normal;
+    &::before,
+    &::after {
+        content: '';
+        position: absolute;
+        width: 4px;
+        height: 4px;
+        background: #00ffff;
+        border-radius: 50%;
+        box-shadow:
+            0 0 10px #00ffff,
+            0 0 20px #00ffff,
+            0 0 30px #00ffff;
+        animation: particle-float 8s ease-in-out infinite;
     }
 
-    p {
-      font-size: 1.125rem;
-      line-height: 1.7;
-      color: $color-gray-700;
-      margin-bottom: 1rem;
+    &::before {
+        top: 20%;
+        left: 10%;
+        animation-delay: -2s;
     }
 
-    ul {
-      list-style: none;
-      padding: 0;
+    &::after {
+        top: 70%;
+        right: 15%;
+        background: #ff00ff;
+        box-shadow:
+            0 0 10px #ff00ff,
+            0 0 20px #ff00ff,
+            0 0 30px #ff00ff;
+        animation-delay: -4s;
+    }
+}
 
-      li {
-        font-size: 1.125rem;
-        color: $color-gray-700;
-        padding: 0.5rem 0;
-        position: relative;
-        padding-left: 1.5rem;
+// 掃描線效果
+.cyber-scan-lines {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: repeating-linear-gradient(0deg,
+            transparent,
+            transparent 2px,
+            rgba(0, 255, 255, 0.03) 2px,
+            rgba(0, 255, 255, 0.03) 4px);
+    animation: scan-lines 0.1s linear infinite;
+}
+
+// 數據流效果
+.cyber-data-streams {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    &::before,
+    &::after {
+        content: '';
+        position: absolute;
+        width: 2px;
+        height: 100px;
+        background: linear-gradient(to bottom,
+                transparent,
+                #00ff00,
+                #00ff00,
+                transparent);
+        animation: data-stream 4s linear infinite;
+    }
+
+    &::before {
+        left: 25%;
+        animation-delay: -1s;
+    }
+
+    &::after {
+        left: 75%;
+        background: linear-gradient(to bottom,
+                transparent,
+                #ff00ff,
+                #ff00ff,
+                transparent);
+        animation-delay: -3s;
+    }
+}
+
+// 幾何圖案
+.cyber-geometry {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 30%;
+        right: 20%;
+        width: 150px;
+        height: 150px;
+        border: 1px solid rgba(255, 0, 255, 0.3);
+        border-radius: 10px;
+        animation: geometry-rotate 15s linear infinite;
+    }
+
+    &::after {
+        content: '';
+        position: absolute;
+        bottom: 20%;
+        left: 10%;
+        width: 100px;
+        height: 100px;
+        border: 1px solid rgba(0, 255, 255, 0.3);
+        transform: rotate(45deg);
+        animation: geometry-pulse 3s ease-in-out infinite;
+    }
+}
+
+// 霓虹條紋效果
+.cyber-stripes {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: repeating-linear-gradient(45deg,
+            transparent,
+            transparent 98px,
+            rgba(0, 255, 255, 0.02) 100px,
+            rgba(0, 255, 255, 0.02) 102px);
+    animation: stripes-move 25s linear infinite;
+}
+
+// 漸變文字效果 - Tailwind 無法直接實現的動畫效果
+.gradient-text {
+    background: linear-gradient(135deg, #00ffff, #ff00ff, #00ff00);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-size: 200% 200%;
+    animation: gradient-shift 3s ease-in-out infinite;
+    text-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+}
+
+// 交易卡片樣式 - 賽博龐克風格
+.card-trading {
+    padding: 1.5rem;
+    border-radius: 1rem;
+    background: rgba(0, 0, 0, 0.8);
+    border: 1px solid rgba(0, 255, 255, 0.3);
+    box-shadow:
+        0 0 20px rgba(0, 255, 255, 0.1),
+        inset 0 1px 0 rgba(0, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg,
+                transparent,
+                rgba(0, 255, 255, 0.1),
+                transparent);
+        transition: left 0.5s ease;
+    }
+
+    &:hover {
+        border-color: rgba(0, 255, 255, 0.6);
+        box-shadow:
+            0 0 30px rgba(0, 255, 255, 0.2),
+            inset 0 1px 0 rgba(0, 255, 255, 0.2);
+        transform: translateY(-4px);
 
         &::before {
-          content: '•';
-          color: $color-primary;
-          font-size: 1.5rem;
-          position: absolute;
-          left: 0;
-          top: 0.25rem;
+            left: 100%;
         }
-      }
     }
-  }
 }
+
+// 賽博龐克按鈕樣式
+.btn-crypto {
+    padding: 1rem 2rem;
+    border-radius: 1rem;
+    font-weight: 600;
+    color: #000;
+    background: linear-gradient(135deg, #00ffff, #00ff00);
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow:
+        0 0 20px rgba(0, 255, 255, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-family: 'Courier New', monospace;
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, #ff00ff, #0099ff);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    &:hover {
+        box-shadow:
+            0 0 30px rgba(0, 255, 255, 0.5),
+            inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        transform: translateY(-1px);
+
+        &::before {
+            opacity: 1;
+        }
+    }
+
+    &:focus {
+        outline: none;
+        box-shadow:
+            0 0 0 2px #00ffff,
+            0 0 0 4px rgba(0, 255, 255, 0.3);
+    }
+}
+
+// 賽博龐克價格顏色
+.price-up {
+    color: #00ff00;
+    font-family: 'Courier New', monospace;
+    text-shadow: 0 0 10px #00ff00;
+    animation: price-glow-green 2s ease-in-out infinite;
+}
+
+.price-down {
+    color: #ff0040;
+    font-family: 'Courier New', monospace;
+    text-shadow: 0 0 10px #ff0040;
+    animation: price-glow-red 2s ease-in-out infinite;
+}
+
+// 賽博龐克網格背景效果
+.bg-grid-pattern {
+    background-image:
+        linear-gradient(rgba(0, 255, 255, 0.1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 255, 255, 0.1) 1px, transparent 1px);
+    background-size: 50px 50px;
+    animation: grid-pulse 4s ease-in-out infinite;
+}
+
+// 更多賽博龐克粒子
+.cyber-particles-extended {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+
+    .particle {
+        position: absolute;
+        width: 2px;
+        height: 2px;
+        background: #00ffff;
+        border-radius: 50%;
+        animation: particle-twinkle 3s ease-in-out infinite;
+
+        &:nth-child(1) {
+            top: 15%;
+            left: 20%;
+            animation-delay: 0s;
+        }
+
+        &:nth-child(2) {
+            top: 60%;
+            left: 80%;
+            background: #ff00ff;
+            animation-delay: -1s;
+        }
+
+        &:nth-child(3) {
+            top: 40%;
+            left: 60%;
+            background: #00ff00;
+            animation-delay: -2s;
+        }
+
+        &:nth-child(4) {
+            top: 80%;
+            left: 30%;
+            background: #ffff00;
+            animation-delay: -0.5s;
+        }
+
+        &:nth-child(5) {
+            top: 25%;
+            left: 70%;
+            background: #ff0066;
+            animation-delay: -1.5s;
+        }
+    }
+}
+
+// 動畫延遲類別
+.animate-delay-2s {
+    animation-delay: -2s;
+}
+
+.animate-delay-4s {
+    animation-delay: -4s;
+}
+
+// 所有動畫關鍵幀定義
+@keyframes gradient-shift {
+
+    0%,
+    100% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+}
+
+@keyframes grid-move {
+    0% {
+        transform: translate(0, 0);
+    }
+
+    100% {
+        transform: translate(50px, 50px);
+    }
+}
+
+@keyframes grid-pulse {
+
+    0%,
+    100% {
+        opacity: 0.3;
+    }
+
+    50% {
+        opacity: 0.6;
+    }
+}
+
+@keyframes particle-float {
+
+    0%,
+    100% {
+        transform: translateY(0px) scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: translateY(-20px) scale(1.2);
+        opacity: 0.8;
+    }
+}
+
+@keyframes particle-twinkle {
+
+    0%,
+    100% {
+        opacity: 0;
+        transform: scale(0);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1);
+        box-shadow: 0 0 10px currentColor;
+    }
+}
+
+@keyframes scan-lines {
+    0% {
+        transform: translateY(0);
+    }
+
+    100% {
+        transform: translateY(2px);
+    }
+}
+
+@keyframes data-stream {
+    0% {
+        transform: translateY(-100px);
+        opacity: 0;
+    }
+
+    10% {
+        opacity: 1;
+    }
+
+    90% {
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateY(100vh);
+        opacity: 0;
+    }
+}
+
+@keyframes geometry-rotate {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes geometry-pulse {
+
+    0%,
+    100% {
+        transform: rotate(45deg) scale(1);
+        opacity: 0.3;
+    }
+
+    50% {
+        transform: rotate(45deg) scale(1.1);
+        opacity: 0.6;
+    }
+}
+
+@keyframes stripes-move {
+    0% {
+        background-position: 0 0;
+    }
+
+    100% {
+        background-position: 100px 100px;
+    }
+}
+
+@keyframes price-glow-green {
+
+    0%,
+    100% {
+        text-shadow: 0 0 5px #00ff00;
+    }
+
+    50% {
+        text-shadow:
+            0 0 10px #00ff00,
+            0 0 20px #00ff00,
+            0 0 30px #00ff00;
+    }
+}
+
+@keyframes price-glow-red {
+
+    0%,
+    100% {
+        text-shadow: 0 0 5px #ff0040;
+    }
+
+    50% {
+        text-shadow:
+            0 0 10px #ff0040,
+            0 0 20px #ff0040,
+            0 0 30px #ff0040;
+    }
+}
+
+// 響應式設計
+@media (max-width: 768px) {
+    .cyber-background {
+        display: none; // 在手機上隱藏複雜背景以提升性能
+    }
+
+    .card-trading {
+        padding: 1rem;
+    }
+
+    .btn-crypto {
+        padding: 0.75rem 1.5rem;
+        font-size: 0.875rem;
+    }
+}
+
+// 其他所有樣式都使用 Tailwind CSS 類別實現
