@@ -1,18 +1,18 @@
 {
     "name": "portfolio",
     "version": "0.0.0",
-  "scripts": {
-    "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
-    "build:prod": "ng build --configuration production",
-    "build:en": "ng build --configuration production --localize",
-    "build:zh-TW": "ng build --configuration production --localize",
-    "watch": "ng build --watch --configuration development",
-    "test": "ng test",
-    "extract-i18n": "ng extract-i18n",
-    "serve:ssr": "node dist/server/server.mjs"
-  },
+    "scripts": {
+        "ng": "ng",
+        "start": "ng serve",
+        "build": "ng build",
+        "build:prod": "ng build --configuration production",
+        "build:en": "ng build --configuration production --localize",
+        "build:zh-TW": "ng build --configuration production --localize",
+        "watch": "ng build --watch --configuration development",
+        "test": "ng test",
+        "extract-i18n": "ng extract-i18n",
+        "serve:ssr": "node dist/server/server.mjs"
+    },
     "private": true,
     "dependencies": {
         "@angular/common": "^19.2.0",
@@ -25,6 +25,7 @@
         "@angular/platform-server": "^19.2.0",
         "@angular/router": "^19.2.0",
         "@angular/ssr": "^19.2.15",
+        "echarts": "^5.6.0",
         "express": "^4.18.2",
         "primeicons": "^7.0.0",
         "primeng": "^19.1.3",

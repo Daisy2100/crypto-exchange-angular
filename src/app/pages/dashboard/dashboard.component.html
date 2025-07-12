@@ -1,32 +1,131 @@
-<div class="about-container">
-    <section class="about-hero">
-        <div class="hero-content">
-            <h1 class="about-title">關於我們</h1>
-            <p class="about-subtitle">了解我們的故事與使命</p>
-        </div>
-    </section>
-
-    <section class="about-content">
-        <div class="content-wrapper">
-            <div class="about-section">
-                <h2>我們的使命</h2>
-                <p>致力於提供優質的服務與產品，為客戶創造最大價值。</p>
-            </div>
-
-            <div class="about-section">
-                <h2>我們的願景</h2>
-                <p>成為業界領先的品牌，持續創新並追求卓越。</p>
-            </div>
-
-            <div class="about-section">
-                <h2>我們的價值觀</h2>
-                <ul>
-                    <li>誠信為本</li>
-                    <li>客戶至上</li>
-                    <li>持續創新</li>
-                    <li>團隊合作</li>
-                </ul>
+<div class="dashboard-container">
+    <!-- 頂部統計卡片 -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div class="bg-gray-800 rounded-xl p-6 border border-gray-700">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-gray-400 text-sm">總資產價值</p>
+                    <p class="text-white text-2xl font-bold">$127,543.21</p>
+                    <p class="text-green-500 text-sm">+5.67% (24h)</p>
+                </div>
+                <div class="text-yellow-500 text-3xl">₿</div>
             </div>
         </div>
-    </section>
+
+        <div class="bg-gray-800 rounded-xl p-6 border border-gray-700">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-gray-400 text-sm">今日盈虧</p>
+                    <p class="text-white text-2xl font-bold">+$2,847.35</p>
+                    <p class="text-green-500 text-sm">+2.28%</p>
+                </div>
+                <div class="text-green-500 text-3xl">📈</div>
+            </div>
+        </div>
+
+        <div class="bg-gray-800 rounded-xl p-6 border border-gray-700">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-gray-400 text-sm">持有幣種</p>
+                    <p class="text-white text-2xl font-bold">12</p>
+                    <p class="text-blue-500 text-sm">種加密貨幣</p>
+                </div>
+                <div class="text-blue-500 text-3xl">🪙</div>
+            </div>
+        </div>
+
+        <div class="bg-gray-800 rounded-xl p-6 border border-gray-700">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-gray-400 text-sm">24h 交易量</p>
+                    <p class="text-white text-2xl font-bold">458.7 BTC</p>
+                    <p class="text-purple-500 text-sm">$29.4M USD</p>
+                </div>
+                <div class="text-purple-500 text-3xl">💱</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 圖表區域 -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        <!-- Bitcoin 價格走勢圖 -->
+        <div class="bg-gray-800 rounded-xl p-6 border border-gray-700">
+            <div #priceChart class="w-full h-80"></div>
+        </div>
+
+        <!-- 交易量圖表 -->
+        <div class="bg-gray-800 rounded-xl p-6 border border-gray-700">
+            <div #volumeChart class="w-full h-80"></div>
+        </div>
+    </div>
+
+    <!-- 投資組合和熱門幣種 -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- 投資組合分佈 -->
+        <div class="lg:col-span-1 bg-gray-800 rounded-xl p-6 border border-gray-700">
+            <div #portfolioChart class="w-full h-80"></div>
+        </div>
+
+        <!-- 熱門加密貨幣 -->
+        <div class="lg:col-span-2 bg-gray-800 rounded-xl p-6 border border-gray-700">
+            <h3 class="text-white text-xl font-bold mb-4">熱門加密貨幣</h3>
+            <div class="space-y-4">
+                <div class="flex items-center justify-between p-4 bg-gray-700 rounded-lg">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-10 h-10 bg-yellow-500 rounded-full flex items-center justify-center text-white font-bold">₿</div>
+                        <div>
+                            <p class="text-white font-semibold">Bitcoin</p>
+                            <p class="text-gray-400 text-sm">BTC</p>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-white font-semibold">$65,234.56</p>
+                        <p class="text-green-500 text-sm">+2.45%</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between p-4 bg-gray-700 rounded-lg">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold">Ξ</div>
+                        <div>
+                            <p class="text-white font-semibold">Ethereum</p>
+                            <p class="text-gray-400 text-sm">ETH</p>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-white font-semibold">$3,847.92</p>
+                        <p class="text-green-500 text-sm">+1.23%</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between p-4 bg-gray-700 rounded-lg">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center text-white font-bold">₳</div>
+                        <div>
+                            <p class="text-white font-semibold">Cardano</p>
+                            <p class="text-gray-400 text-sm">ADA</p>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-white font-semibold">$0.8453</p>
+                        <p class="text-red-500 text-sm">-0.87%</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between p-4 bg-gray-700 rounded-lg">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-10 h-10 bg-purple-500 rounded-full flex items-center justify-center text-white font-bold">●</div>
+                        <div>
+                            <p class="text-white font-semibold">Polkadot</p>
+                            <p class="text-gray-400 text-sm">DOT</p>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-white font-semibold">$12.67</p>
+                        <p class="text-green-500 text-sm">+3.45%</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

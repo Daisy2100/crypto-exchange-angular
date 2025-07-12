@@ -1,6 +1,6 @@
 <!-- 簡約現代導航元件 -->
 <div class="bg-black sticky top-0 z-50">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="max-w-screen mx-auto px-4 sm:px-6 lg:px-8">
         <!-- 手機版導航列 -->
         <div class="lg:hidden flex items-center justify-between h-16">
             <!-- Logo -->
@@ -13,6 +13,10 @@
 
             <!-- 右側區域 -->
             <div class="flex items-center space-x-3">
+                <!-- 登入按鈕 - 手機版簡化 -->
+                <button class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-md text-sm font-medium transition-colors duration-200">
+                    登入
+                </button>
 
                 <!-- 手機版選單按鈕 -->
                 <button class="p-2 rounded-md text-gray-400 hover:text-white transition-colors duration-200"
@@ -26,62 +30,71 @@
         </div>
 
         <!-- 桌面版導航列 -->
-        <div class="hidden lg:flex items-center justify-between h-16">
-            <!-- Logo -->
-            <a routerLink="/" class="flex items-center text-white text-xl font-medium">
-                <div class="cyberpunk-logo">
-                    <span class="logo-text" [innerHTML]="getAnimatedLogoHTML()"></span>
-                    <span class="cursor-dot">.</span>
-                </div>
-            </a>
+        <div class="hidden lg:flex items-center h-16">
+            <!-- Logo - 固定左側 -->
+            <div class="flex-shrink-0">
+                <a routerLink="/" class="flex items-center text-white text-xl font-medium">
+                    <div class="cyberpunk-logo">
+                        <span class="logo-text" [innerHTML]="getAnimatedLogoHTML()"></span>
+                        <span class="cursor-dot">.</span>
+                    </div>
+                </a>
+            </div>
 
             <!-- 中央導航選單 -->
-            <nav class="flex items-center space-x-8">
-                <div *ngFor="let item of navigationItems; trackBy: trackByNavItem" class="relative">
-                    <!-- 有子選單的項目 -->
-                    <div *ngIf="hasChildren(item)"
-                         class="relative group"
-                         (mouseenter)="onMouseEnter(item)"
-                         (mouseleave)="onMouseLeave(item)">
-                        <button class="flex items-center text-gray-300 hover:text-white px-3 py-2 text-sm font-medium transition-colors duration-200"
-                                [class.text-white]="item.isActive">
-                            {{ item.displayName }}
-                            <svg class="w-4 h-4 ml-1 transform transition-transform duration-200"
-                                 [class.rotate-180]="item.isExpanded"
-                                 fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-                            </svg>
-                        </button>
+            <div class="flex-1 flex justify-center">
+                <nav class="flex items-center space-x-8">
+                    <div *ngFor="let item of navigationItems; trackBy: trackByNavItem" class="relative">
+                        <!-- 有子選單的項目 -->
+                        <div *ngIf="hasChildren(item)"
+                             class="relative group"
+                             (mouseenter)="onMouseEnter(item)"
+                             (mouseleave)="onMouseLeave(item)">
+                            <button class="flex items-center text-gray-300 hover:text-white px-3 py-2 text-sm font-medium transition-colors duration-200"
+                                    [class.text-white]="item.isActive">
+                                {{ item.displayName }}
+                                <svg class="w-4 h-4 ml-1 transform transition-transform duration-200"
+                                     [class.rotate-180]="item.isExpanded"
+                                     fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                </svg>
+                            </button>
 
-                        <!-- 下拉選單 -->
-                        <div *ngIf="item.isExpanded"
-                             class="absolute left-0 top-full mt-1 w-48 bg-gray-900 border border-gray-700 rounded-lg shadow-lg z-50">
-                            <div class="py-2">
-                                <a *ngFor="let child of item.children; trackBy: trackByNavItem"
-                                   [routerLink]="child.path"
-                                   class="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800 transition-colors duration-200"
-                                   [class.text-white]="child.isActive"
-                                   [class.bg-gray-800]="child.isActive">
-                                    {{ child.displayName }}
-                                </a>
+                            <!-- 下拉選單 -->
+                            <div *ngIf="item.isExpanded"
+                                 class="absolute left-0 top-full mt-1 w-48 bg-gray-900 border border-gray-700 rounded-lg shadow-lg z-50">
+                                <div class="py-2">
+                                    <a *ngFor="let child of item.children; trackBy: trackByNavItem"
+                                       [routerLink]="child.path"
+                                       class="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800 transition-colors duration-200"
+                                       [class.text-white]="child.isActive"
+                                       [class.bg-gray-800]="child.isActive">
+                                        {{ child.displayName }}
+                                    </a>
+                                </div>
                             </div>
                         </div>
+
+                        <!-- 沒有子選單的項目 -->
+                        <a *ngIf="!hasChildren(item)"
+                           [routerLink]="item.path"
+                           class="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium transition-colors duration-200"
+                           [class.text-white]="item.isActive">
+                            {{ item.displayName }}
+                        </a>
                     </div>
+                </nav>
+            </div>
 
-                    <!-- 沒有子選單的項目 -->
-                    <a *ngIf="!hasChildren(item)"
-                       [routerLink]="item.path"
-                       class="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium transition-colors duration-200"
-                       [class.text-white]="item.isActive">
-                        {{ item.displayName }}
-                    </a>
-                </div>
-            </nav>
-
-            <!-- 右側區域 語言切換器 -->
-            <!-- <div class="flex items-center">
-                <app-language-switcher></app-language-switcher>
-            </div> -->
+            <!-- 右側區域 - 登入按鈕 - 固定右側 -->
+            <div class="flex-shrink-0 flex items-center space-x-4">
+                <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200">
+                    登入
+                </button>
+                <button class="border border-gray-600 hover:border-gray-400 text-gray-300 hover:text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200">
+                    註冊
+                </button>
+            </div>
         </div>
 
         <!-- Loading 狀態 -->

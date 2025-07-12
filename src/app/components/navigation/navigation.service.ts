@@ -127,14 +127,7 @@ export class NavigationService {
                 path: '/about',
                 order: 4,
                 translationKey: 'nav.about'
-            },
-            {
-                id: 'portfolio',
-                displayName: '登入',
-                path: '/portfolio',
-                order: 5,
-                translationKey: 'nav.login'
-            },
+            }
         ];
     }
 
