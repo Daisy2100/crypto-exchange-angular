@@ -13,6 +13,7 @@ export interface NavigationItem {
     hasChildren?: boolean;
     parentId?: string;
     translationKey?: string;
+    isExpanded?: boolean;
 }
 
 @Injectable({

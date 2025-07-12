@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { MenubarModule } from 'primeng/menubar';
 import { BadgeModule } from 'primeng/badge';
@@ -11,21 +11,26 @@ import { MenuItem } from 'primeng/api';
 import { NavigationService, NavigationItem } from './navigation.service';
 import { TranslatePipe } from '../../core/i18n/translate.pipe';
 import { I18nService } from '../../core/i18n/i18n.service';
+import { LanguageSwitcherComponent } from '../../core/components/language-switcher.component';
 
 @Component({
     selector: 'app-navigation',
     standalone: true,
-    imports: [RouterModule, MenubarModule, BadgeModule, InputTextModule, AvatarModule, RippleModule, SidebarModule, CommonModule, TranslatePipe],
+    imports: [RouterModule, MenubarModule, BadgeModule, InputTextModule, AvatarModule, RippleModule, SidebarModule, CommonModule, TranslatePipe, LanguageSwitcherComponent],
     templateUrl: './navigation.component.html',
     styleUrl: './navigation.component.scss'
 })
-export class NavigationComponent implements OnInit {
+export class NavigationComponent implements OnInit, OnDestroy {
     @Input() logoText: string = 'CryptoExchange'; // 可自定義的 Logo 文字
 
     menuItems: MenuItem[] = [];
     navigationItems: NavigationItem[] = [];
     isLoading: boolean = true;
     sidebarVisible: boolean = false;
+
+    // 賽博龐克動畫相關
+    currentCharIndex: number = 0;
+    animationInterval: any = null;
 
     constructor(
         private navigationService: NavigationService,
@@ -34,11 +39,26 @@ export class NavigationComponent implements OnInit {
 
     ngOnInit() {
         this.loadNavigationItems();
+        this.startCyberpunkAnimation();
 
         // 監聽語言變化
         this.i18nService.currentLanguage$.subscribe(() => {
             this.loadNavigationItems();
         });
+    }
+
+    ngOnDestroy() {
+        // 清理定時器
+        if (this.hideTimeout) {
+            clearTimeout(this.hideTimeout);
+            this.hideTimeout = null;
+        }
+
+        // 清理動畫定時器
+        if (this.animationInterval) {
+            clearInterval(this.animationInterval);
+            this.animationInterval = null;
+        }
     }
 
     /**
@@ -110,5 +130,63 @@ export class NavigationComponent implements OnInit {
      */
     hasChildren(item: NavigationItem): boolean {
         return this.navigationService.hasChildren(item);
+    }
+
+    /**
+     * 滑鼠進入事件處理器
+     */
+    onMouseEnter(item: NavigationItem) {
+        // 清除任何待執行的隱藏延遲
+        if (this.hideTimeout) {
+            clearTimeout(this.hideTimeout);
+            this.hideTimeout = null;
+        }
+
+        // 設置展開狀態
+        this.navigationItems.forEach(navItem => {
+            if (navItem.id === item.id) {
+                navItem.isExpanded = true;
+            } else {
+                navItem.isExpanded = false;
+            }
+        });
+    }
+
+    /**
+     * 滑鼠離開事件處理器
+     */
+    onMouseLeave(item: NavigationItem) {
+        // 延遲隱藏下拉選單，防止快速移動時閃爍
+        this.hideTimeout = setTimeout(() => {
+            item.isExpanded = false;
+        }, 300);
+    }
+
+    private hideTimeout: any = null;
+
+    /**
+     * 啟動賽博龐克動畫效果
+     */
+    startCyberpunkAnimation() {
+        // 每 1.5 秒切換到下一個字符位置
+        this.animationInterval = setInterval(() => {
+            this.currentCharIndex = (this.currentCharIndex + 1) % this.logoText.length;
+        }, 1500);
+    }
+
+    /**
+     * 獲取帶有動畫效果的 Logo HTML
+     */
+    getAnimatedLogoHTML(): string {
+        if (!this.logoText) return '';
+
+        return this.logoText
+            .split('')
+            .map((char, index) => {
+                const isActive = index === this.currentCharIndex;
+                const className = isActive ? 'animate-char active' : 'animate-char';
+                return `<span class="${className}">${char}</span>`;
+            })
+            .join('');
     }
 }
