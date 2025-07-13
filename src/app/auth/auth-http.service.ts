@@ -1,3 +1,4 @@
+// (移除 class 外部的 isAuthenticated)
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams, HttpContext } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -6,6 +7,9 @@ import { Observable } from 'rxjs';
     providedIn: 'root'
 })
 export class AuthHttpService {
+    isAuthenticated(): boolean {
+        return !!this.getToken();
+    }
     constructor(private http: HttpClient) { }
 
     token: string = '';

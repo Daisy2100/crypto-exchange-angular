@@ -54,7 +54,7 @@ export class MarketsComponent implements OnInit, OnDestroy {
         this.error = null;
 
         this.$isLoadingSubscription.add(
-            this.ApiService.get(apiMarkets.market).subscribe({
+            this.ApiService.get(apiMarkets.markets()).subscribe({
                 next: (response: any) => {
                     if (response?.code === '0000000') {
                         this.markets = response.data;

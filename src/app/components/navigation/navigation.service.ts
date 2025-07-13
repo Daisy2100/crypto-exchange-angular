@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { I18nService } from '../../core/i18n/i18n.service';
+import { I18nService } from '@core/i18n/i18n.service';
 
 export interface NavigationItem {
     id: string;

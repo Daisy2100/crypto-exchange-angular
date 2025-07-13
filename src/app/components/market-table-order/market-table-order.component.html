@@ -1,0 +1,203 @@
+<div class="flex flex-col gap-8">
+  <!-- K 線圖區塊 -->
+  <p-card styleClass="!bg-gray-900 !border-cyan-700 dark:!border-fuchsia-700 shadow-xl rounded-2xl">
+    <ng-template pTemplate="header">
+      <div class="flex items-center gap-2">
+        <i class="pi pi-chart-line text-cyan-400 dark:text-fuchsia-400"></i>
+        <span class="text-lg font-bold text-cyan-300 dark:text-fuchsia-300">K 線圖</span>
+      </div>
+    </ng-template>
+    <div #klineChart class="w-full h-96"></div>
+    <div class="text-right text-xs text-cyan-400 mt-2">最新價: <span class="font-mono">{{ latestPrice }}</span> {{ quoteAsset }}</div>
+  </p-card>
+
+  <!-- OrderBook + 下單表單 -->
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <!-- OrderBook -->
+    <div class="lg:col-span-1">
+      <p-card styleClass="!bg-gray-900 !border-cyan-700 dark:!border-fuchsia-700 shadow-lg rounded-xl">
+        <ng-template pTemplate="header">
+          <span class="text-cyan-300 dark:text-fuchsia-300 font-bold">Order Book</span>
+        </ng-template>
+        <div>
+          <div class="mb-2 text-xs text-pink-400 font-bold">Asks</div>
+          <table class="w-full text-xs text-right">
+            <thead>
+              <tr class="text-pink-300">
+                <th class="px-1">價格</th>
+                <th class="px-1">數量</th>
+                <th class="px-1">總額</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let ask of askSide">
+                <td class="text-pink-400">{{ ask.price | number:'1.3-3' }}</td>
+                <td>{{ ask.volume | number:'1.3-3' }}</td>
+                <td>{{ (ask.price * ask.volume) | number:'1.2-2' }}</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="mt-4 mb-2 text-xs text-green-400 font-bold">Bids</div>
+          <table class="w-full text-xs text-right">
+            <thead>
+              <tr class="text-green-300">
+                <th class="px-1">價格</th>
+                <th class="px-1">數量</th>
+                <th class="px-1">總額</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let bid of bidSide">
+                <td class="text-green-400">{{ bid.price | number:'1.3-3' }}</td>
+                <td>{{ bid.volume | number:'1.3-3' }}</td>
+                <td>{{ (bid.price * bid.volume) | number:'1.2-2' }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </p-card>
+    </div>
+
+    <!-- 下單表單 -->
+    <div class="lg:col-span-2">
+      <p-card styleClass="!bg-gray-900 !border-cyan-700 dark:!border-fuchsia-700 shadow-lg rounded-xl">
+        <ng-template pTemplate="header">
+          <span class="text-cyan-300 dark:text-fuchsia-300 font-bold">下單</span>
+        </ng-template>
+        <div class="flex flex-col gap-4">
+          <div class="flex gap-2 mb-2">
+            <button pButton type="button" label="限價單" [class.bg-cyan-700]="orderType==='limit'" (click)="orderType='limit'" title="限價單">限價單</button>
+            <button pButton type="button" label="市價單" [class.bg-cyan-700]="orderType==='market'" (click)="orderType='market'" title="市價單">市價單</button>
+          </div>
+          <div class="flex gap-2 mb-2">
+            <button pButton type="button" label="買入" [class.bg-green-700]="placeOrderBtn==='Buy'" (click)="changePlaceOrderBtn('Buy')" title="買入">買入</button>
+            <button pButton type="button" label="賣出" [class.bg-pink-700]="placeOrderBtn==='Sell'" (click)="changePlaceOrderBtn('Sell')" title="賣出">賣出</button>
+          </div>
+          <!-- 限價單 -->
+          <div *ngIf="orderType==='limit'" class="flex flex-col gap-2">
+            <label>價格 ({{ quoteAsset }})</label>
+            <input pInputText type="number" [(ngModel)]="limitPrice" class="w-full" step="0.01" placeholder="請輸入價格" title="價格 ({{ quoteAsset }})" />
+            <label>數量 ({{ baseAsset }})</label>
+            <input pInputText type="number" [(ngModel)]="limitAmount" class="w-full" step="0.00001" placeholder="請輸入數量" title="數量 ({{ baseAsset }})" />
+          </div>
+          <!-- 市價單 -->
+          <div *ngIf="orderType==='market'" class="flex flex-col gap-2">
+            <ng-container *ngIf="placeOrderBtn==='Buy'">
+              <label>買入金額 ({{ quoteAsset }})</label>
+              <input pInputText type="number" [(ngModel)]="marketBuyAmount" class="w-full" step="0.01" placeholder="請輸入買入金額" title="買入金額 ({{ quoteAsset }})" />
+            </ng-container>
+            <ng-container *ngIf="placeOrderBtn==='Sell'">
+              <label>賣出數量 ({{ baseAsset }})</label>
+              <input pInputText type="number" [(ngModel)]="marketSellSize" class="w-full" step="0.00001" placeholder="請輸入賣出數量" title="賣出數量 ({{ baseAsset }})" />
+            </ng-container>
+          </div>
+          <div class="flex items-center gap-2">
+            <label>下單百分比</label>
+            <input type="range" min="0" max="100" [(ngModel)]="orderPercentage" class="w-full" title="下單百分比" />
+            <span class="text-xs">{{ orderPercentage }}%</span>
+          </div>
+          <div class="flex gap-4 text-xs text-gray-400">
+            <div>Base: {{ baseBalance }} {{ baseAsset }}</div>
+            <div>Quote: {{ quoteBalance }} {{ quoteAsset }}</div>
+          </div>
+          <div class="flex gap-2">
+            <button pButton type="button" label="送出訂單" class="w-full bg-cyan-600" (click)="placeOrder(placeOrderBtn)" title="送出訂單">送出訂單</button>
+          </div>
+        </div>
+      </p-card>
+    </div>
+  </div>
+
+  <!-- 開倉訂單列表 -->
+  <p-card styleClass="!bg-gray-900 !border-cyan-700 dark:!border-fuchsia-700 shadow-lg rounded-xl">
+    <ng-template pTemplate="header">
+      <span class="text-cyan-300 dark:text-fuchsia-300 font-bold">Open Orders</span>
+    </ng-template>
+    <div class="overflow-x-auto">
+      <table class="min-w-full text-xs">
+        <thead>
+          <tr class="text-cyan-400">
+            <th>Order ID</th>
+            <th>Type</th>
+            <th>Side</th>
+            <th>價格</th>
+            <th>原始數量</th>
+            <th>已成交</th>
+            <th>狀態</th>
+            <th>取消</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let order of openOrders">
+            <td>{{ order.id }}</td>
+            <td>{{ order.type === 0 ? 'LIMIT' : 'MARKET' }}</td>
+            <td>{{ order.side === 0 ? 'BUY' : 'SELL' }}</td>
+            <td>{{ order.price ?? '-' }}</td>
+            <td>{{ order.original_size }}</td>
+            <td>{{ order.original_size - order.remaining_size }}</td>
+            <td>{{ order.status }}</td>
+            <td><button pButton type="button" icon="pi pi-times" class="p-button-sm p-button-danger" (click)="cancelOrder(order.id)" title="取消訂單">取消</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </p-card>
+
+  <!-- 歷史訂單列表 -->
+  <p-card styleClass="!bg-gray-900 !border-cyan-700 dark:!border-fuchsia-700 shadow-lg rounded-xl">
+    <ng-template pTemplate="header">
+      <span class="text-cyan-300 dark:text-fuchsia-300 font-bold">Order History</span>
+    </ng-template>
+    <div class="overflow-x-auto">
+      <table class="min-w-full text-xs">
+        <thead>
+          <tr class="text-cyan-400">
+            <th>Order ID</th>
+            <th>Type</th>
+            <th>Side</th>
+            <th>價格</th>
+            <th>數量</th>
+            <th>均價</th>
+            <th>手續費</th>
+            <th>幣別</th>
+            <th>狀態</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let order of orderHistory">
+            <td>{{ order.id }}</td>
+            <td>{{ order.type === 0 ? 'LIMIT' : 'MARKET' }}</td>
+            <td>{{ order.side === 0 ? 'BUY' : 'SELL' }}</td>
+            <td>{{ order.price ?? order.avg_dealt_price }}</td>
+            <td>{{ order.original_size }}</td>
+            <td>{{ order.avg_dealt_price }}</td>
+            <td>{{ order.fees }}</td>
+            <td>{{ order.fee_asset }}</td>
+            <td>{{ order.status }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </p-card>
+
+  <!-- Cmd Output -->
+  <p-card styleClass="!bg-gray-900 !border-cyan-700 dark:!border-fuchsia-700 shadow-lg rounded-xl">
+    <ng-template pTemplate="header">
+      <span class="text-cyan-300 dark:text-fuchsia-300 font-bold">Cmd Output</span>
+    </ng-template>
+    <div class="cmd-window text-xs font-mono text-cyan-400 bg-gray-950 p-2 rounded">
+      <span *ngIf="cmdOutputList.length === 0">No command output yet.</span>
+      <ul>
+        <li *ngFor="let output of cmdOutputList">{{ output }}</li>
+      </ul>
+    </div>
+  </p-card>
+
+  <!-- Modal (PrimeNG Dialog) -->
+  <p-dialog [(visible)]="showModal" [modal]="true" [closable]="true" [dismissableMask]="true" [style]="{width: '350px'}">
+    <ng-template pTemplate="header">
+      <span>{{ commonData.data.title }}</span>
+    </ng-template>
+    <div>{{ commonData.data.context }}</div>
+  </p-dialog>
+</div>

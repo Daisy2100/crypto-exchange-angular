@@ -41,7 +41,11 @@
                 class="group transition cursor-pointer bg-gradient-to-r from-gray-900 via-gray-950 to-gray-900 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950 border-b border-cyan-800 dark:border-fuchsia-800 hover:neon-row hover:shadow-cyan-400/40 dark:hover:shadow-fuchsia-400/40">
                 <td
                     class="py-3 px-4 font-mono text-base font-extrabold tracking-wide text-white dark:text-white text-left border-r border-cyan-800 dark:border-fuchsia-800 drop-shadow-md">
-                    {{ market.market_name }}
+                    <button
+                        (click)="navigateToMarketOrder(market.market_name); $event.stopPropagation()"
+                        class="text-cyan-400 dark:text-fuchsia-400 hover:text-cyan-300 dark:hover:text-fuchsia-300 transition-colors duration-200 cursor-pointer bg-transparent border-none p-0 font-mono text-base font-extrabold tracking-wide underline-offset-4 hover:underline">
+                        {{ market.market_name }}
+                    </button>
                 </td>
                 <td class="py-3 px-4 font-mono text-base font-extrabold tracking-wide text-right border-r border-cyan-800 dark:border-fuchsia-800 drop-shadow-md"
                     [ngClass]="market.price_change_24h >= 0 ? 'text-green-500 neon-green-glow dark:text-green-300' : 'text-red-500 neon-red-glow dark:text-red-300'">

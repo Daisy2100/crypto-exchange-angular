@@ -44,7 +44,7 @@ export class MarketTableComponent implements OnInit, OnDestroy {
     fetchMarketData() {
         this.loading = true;
         this.error = null;
-        this.apiService.get(apiMarkets.market).subscribe({
+        this.apiService.get(apiMarkets.markets()).subscribe({
             next: (response: any) => {
                 if (response?.code === '0000000') {
                     this.markets = response.data;
@@ -91,7 +91,15 @@ export class MarketTableComponent implements OnInit, OnDestroy {
     selectMarket(event: any) {
         const market = Array.isArray(event) ? event[0] : event;
         if (market && market.market_name) {
-            this.router.navigate(['/markets', market.market_name]);
+            // 導航到帶交易對參數的市場訂單頁面
+            this.router.navigate(['/market-order', market.market_name]);
+        }
+    }
+
+    navigateToMarketOrder(tradingPair: string) {
+        if (tradingPair) {
+            // 導航到帶交易對參數的市場訂單頁面
+            this.router.navigate(['/market-order', tradingPair]);
         }
     }
 }

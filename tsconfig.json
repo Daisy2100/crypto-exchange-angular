@@ -21,6 +21,17 @@
         "paths": {
             "src/*": ["*"],
             "@/*": ["*"],
+            "@app/*": ["app/*"],
+            "@components/*": ["app/components/*"],
+            "@pages/*": ["app/pages/*"],
+            "@services/*": ["app/services/*"],
+            "@core/*": ["app/core/*"],
+            "@models/*": ["app/models/*"],
+            "@enums/*": ["app/enums/*"],
+            "@api/*": ["app/api/*"],
+            "@auth/*": ["app/auth/*"],
+            "@assets/*": ["assets/*"],
+            "@environments/*": ["environments/*"]
         }
     },
     "angularCompilerOptions": {
