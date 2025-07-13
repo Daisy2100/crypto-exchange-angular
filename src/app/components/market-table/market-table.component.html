@@ -1,72 +1,83 @@
-<div class="">
-    <p-table [value]="markets" [loading]="loading" [paginator]="true" [rows]="20" [rowsPerPageOptions]="[10, 20, 50]"
-        [responsiveLayout]="'scroll'" selectionMode="single" (onRowSelect)="selectMarket($event)"
-        styleClass="bg-gradient-to-br from-gray-900 via-gray-950 to-gray-900 neon-border shadow-2xl rounded-2xl  border-2 border-cyan-400 dark:border-fuchsia-600 w-full"
-        [paginatorStyleClass]="'bg-transparent text-cyan-400 dark:text-fuchsia-400 flex items-center justify-center py-2'">
+<!-- Market Table - 適應卡片容器 -->
+<div>
+    <!-- 載入狀態 -->
+    <div *ngIf="loading" class="loading-overlay">
+        <div class="loading-spinner"></div>
+        <span class="loading-text">Loading market data...</span>
+    </div>
+
+    <!-- 主要表格 -->
+    <p-table
+        *ngIf="!loading"
+        [value]="markets"
+        [paginator]="true"
+        [rows]="20"
+        [rowsPerPageOptions]="[10, 20, 50]"
+        [responsiveLayout]="'scroll'"
+        selectionMode="single"
+        (onRowSelect)="selectMarket($event)">
+
         <ng-template pTemplate="header">
-            <tr
-                class="bg-gradient-to-r from-cyan-900 via-fuchsia-900 to-gray-900 text-cyan-300 dark:text-fuchsia-300 text-base font-bold font-mono border-b border-cyan-400 dark:border-fuchsia-600 neon-header">
-                <th pSortableColumn="market_name" style="width:20%"
-                    class="py-4 px-4 font-semibold tracking-wide font-mono border-r border-cyan-400 dark:border-fuchsia-600">
+            <tr>
+                <th pSortableColumn="market_name">
                     <div class="flex items-center gap-2">
-                        {{ 'markets.table.tradingPair' | translate }}
+                        Trading Pair
                         <p-sortIcon field="market_name" />
                     </div>
                 </th>
-                <th pSortableColumn="latest_price" style="width:20%"
-                    class="py-4 px-4 font-semibold tracking-wide font-mono border-r border-cyan-400 dark:border-fuchsia-600">
+                <th pSortableColumn="latest_price">
                     <div class="flex items-center gap-2">
-                        {{ 'markets.table.price' | translate }}
+                        Price
                         <p-sortIcon field="latest_price" />
                     </div>
                 </th>
-                <th pSortableColumn="price_change_24h" style="width:20%"
-                    class="py-4 px-4 font-semibold tracking-wide font-mono border-r border-cyan-400 dark:border-fuchsia-600">
+                <th pSortableColumn="price_change_24h">
                     <div class="flex items-center gap-2">
-                        {{ 'markets.table.change24h' | translate }}
+                        24h Change
                         <p-sortIcon field="price_change_24h" />
                     </div>
                 </th>
-                <th pSortableColumn="total_volume_24h" style="width:20%"
-                    class="py-4 px-4 font-semibold tracking-wide font-mono">
+                <th pSortableColumn="total_volume_24h">
                     <div class="flex items-center gap-2">
-                        {{ 'markets.table.volume' | translate }}
+                        Volume
                         <p-sortIcon field="total_volume_24h" />
                     </div>
                 </th>
             </tr>
         </ng-template>
+
         <ng-template pTemplate="body" let-market>
             <tr [pSelectableRow]="market"
-                class="group transition cursor-pointer bg-gradient-to-r from-gray-900 via-gray-950 to-gray-900 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950 border-b border-cyan-800 dark:border-fuchsia-800 hover:neon-row hover:shadow-cyan-400/40 dark:hover:shadow-fuchsia-400/40">
-                <td
-                    class="py-3 px-4 font-mono text-base font-extrabold tracking-wide text-white dark:text-white text-left border-r border-cyan-800 dark:border-fuchsia-800 drop-shadow-md">
-                    <button
-                        (click)="navigateToMarketOrder(market.market_name); $event.stopPropagation()"
-                        class="text-cyan-400 dark:text-fuchsia-400 hover:text-cyan-300 dark:hover:text-fuchsia-300 transition-colors duration-200 cursor-pointer bg-transparent border-none p-0 font-mono text-base font-extrabold tracking-wide underline-offset-4 hover:underline">
-                        {{ market.market_name }}
-                    </button>
+                (click)="navigateToMarketOrder(market.market_name); $event.stopPropagation()"
+                class="cursor-pointer">
+
+                <!-- 市場名稱 -->
+                <td class="market-name">
+                    {{ market.market_name }}
                 </td>
-                <td class="py-3 px-4 font-mono text-base font-extrabold tracking-wide text-right border-r border-cyan-800 dark:border-fuchsia-800 drop-shadow-md"
-                    [ngClass]="market.price_change_24h >= 0 ? 'text-green-500 neon-green-glow dark:text-green-300' : 'text-red-500 neon-red-glow dark:text-red-300'">
+
+                <!-- 價格 -->
+                <td class="price-cell text-right"
+                    [class]="market.price_change_24h >= 0 ? 'success-data' : 'error-data'">
                     {{ formatPrice(market.latest_price) }}
                 </td>
-                <td class="py-3 px-4 font-mono text-base font-extrabold tracking-wide text-right border-r border-cyan-800 dark:border-fuchsia-800 drop-shadow-md"
-                    [ngClass]="market.price_change_24h >= 0 ? 'text-green-500 neon-green-glow dark:text-green-300' : 'text-red-500 neon-red-glow dark:text-red-300'">
-                    <span>
-                        {{ formatChange(market.price_change_24h) }}
-                    </span>
+
+                <!-- 24小時變化 -->
+                <td class="price-cell text-right"
+                    [class]="market.price_change_24h >= 0 ? 'success-data' : 'error-data'">
+                    {{ formatChange(market.price_change_24h) }}
                 </td>
-                <td
-                    class="py-3 px-4 font-mono text-base font-extrabold tracking-wide text-white dark:text-white text-right drop-shadow-md">
+
+                <!-- 交易量 -->
+                <td class="text-right">
                     {{ formatVolume(market.total_volume_24h) }}
                 </td>
             </tr>
         </ng-template>
     </p-table>
 
-    <div class="text-xs font-mono mt-3 text-right neon-footer" *ngIf="lastUpdated">
-        <span class="text-cyan-400 dark:text-fuchsia-400">{{ 'markets.table.lastUpdated' | translate }}</span> <span
-            class="text-white">{{ lastUpdated }}</span>
+    <!-- 最後更新時間 -->
+    <div class="last-updated" *ngIf="lastUpdated">
+        Last Updated: {{ lastUpdated }}
     </div>
 </div>

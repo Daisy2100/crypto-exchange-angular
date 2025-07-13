@@ -180,17 +180,12 @@
     </div>
   </p-card>
 
-  <!-- Cmd Output -->
+  <!-- Command Window -->
   <p-card styleClass="!bg-gray-900 !border-cyan-700 dark:!border-fuchsia-700 shadow-lg rounded-xl">
     <ng-template pTemplate="header">
-      <span class="text-cyan-300 dark:text-fuchsia-300 font-bold">Cmd Output</span>
+      <span class="text-cyan-300 dark:text-fuchsia-300 font-bold">Command Window</span>
     </ng-template>
-    <div class="cmd-window text-xs font-mono text-cyan-400 bg-gray-950 p-2 rounded">
-      <span *ngIf="cmdOutputList.length === 0">No command output yet.</span>
-      <ul>
-        <li *ngFor="let output of cmdOutputList">{{ output }}</li>
-      </ul>
-    </div>
+    <app-command-window [pushData]="cmdPushData"></app-command-window>
   </p-card>
 
   <!-- Modal (PrimeNG Dialog) -->

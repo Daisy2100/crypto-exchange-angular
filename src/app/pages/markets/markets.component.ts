@@ -1,9 +1,9 @@
-
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MarketTableComponent } from 'app/components/market-table/market-table.component';
+import { CommandWindowComponent } from 'app/components/command-window/command-window.component';
 import { apiMarkets } from 'app/api/api-markets';
 import { AuthHttpService } from 'app/auth/auth-http.service';
 import { ApiService } from 'app/services/api.service';
@@ -20,7 +20,7 @@ interface Market {
     templateUrl: './markets.component.html',
     styleUrls: ['./markets.component.scss'],
     standalone: true,
-    imports: [CommonModule, MarketTableComponent]
+    imports: [CommonModule, MarketTableComponent, CommandWindowComponent]
 })
 
 export class MarketsComponent implements OnInit, OnDestroy {
@@ -31,6 +31,9 @@ export class MarketsComponent implements OnInit, OnDestroy {
     error: string | null = null;
     refreshInterval: any;
     lastUpdated: string = '';
+
+    // CommandWindow 相關屬性
+    commandWindowData: any = null;
 
     constructor(
         private router: Router,
@@ -59,14 +62,38 @@ export class MarketsComponent implements OnInit, OnDestroy {
                     if (response?.code === '0000000') {
                         this.markets = response.data;
                         this.lastUpdated = new Date().toLocaleTimeString();
+
+                        // 推送數據到 CommandWindow
+                        this.commandWindowData = {
+                            action: 'market_data_fetched',
+                            timestamp: new Date().toISOString(),
+                            marketCount: response.data.length,
+                            status: 'success'
+                        };
                     } else {
                         this.error = response?.message || 'Failed to fetch market data';
+
+                        // 推送錯誤到 CommandWindow
+                        this.commandWindowData = {
+                            action: 'market_data_error',
+                            timestamp: new Date().toISOString(),
+                            error: this.error,
+                            status: 'error'
+                        };
                     }
                     this.loading = false;
                 },
                 error: (err) => {
                     this.error = err?.error?.message || err.message || 'Network error occurred';
                     this.loading = false;
+
+                    // 推送錯誤到 CommandWindow
+                    this.commandWindowData = {
+                        action: 'network_error',
+                        timestamp: new Date().toISOString(),
+                        error: this.error,
+                        status: 'error'
+                    };
                 }
             })
         )

@@ -1,48 +1,357 @@
-.neon-border {
-    box-shadow: 0 0 16px 2px #0ff, 0 0 32px 4px #a0f, 0 0 2px 1px #fff2;
-    border-radius: 1rem;
+// Market Table 元件樣式
+// 適應儀表板卡片佈局，移除自定義容器
+@use '../../../assets/scss/variables' as *;
+@use '../../../assets/scss/themes' as *;
+
+// 基礎樣式設定
+:host {
+    display: block;
+    font-family: $font-family-mono;
+    font-size: $font-size-sm;
 }
 
-.neon-header {
-    text-shadow: 0 0 8px #0ff, 0 0 4px #a0f;
-    border-bottom-width: 2px !important;
+// PrimeNG Table 樣式覆蓋 - 適應卡片容器
+:host ::ng-deep {
+    .p-datatable {
+        background: transparent !important;
+        border: none !important;
+        border-radius: 0 !important;
+        color: rgba(209, 213, 219, 0.9) !important; // gray-300
+        font-family: $font-family-mono !important;
+
+        // 表格標題
+        .p-datatable-thead > tr > th {
+            background: rgba(17, 24, 39, 0.5) !important;
+            border: none !important;
+            border-bottom: 1px solid rgba(75, 85, 99, 0.5) !important;
+            color: rgba(209, 213, 219, 0.9) !important;
+            font-weight: $font-weight-semibold !important;
+            padding: $spacing-3 $spacing-4 !important;
+
+            .p-sortable-column-icon {
+                color: rgba(156, 163, 175, 0.8) !important;
+            }
+        }
+
+        // 表格內容行
+        .p-datatable-tbody > tr {
+            background: transparent !important;
+            border: none !important;
+            border-bottom: 1px solid rgba(75, 85, 99, 0.3) !important;
+            transition: background-color $transition-fast !important;
+
+            &:hover {
+                background: rgba(75, 85, 99, 0.2) !important;
+            }
+
+            > td {
+                border: none !important;
+                padding: $spacing-3 $spacing-4 !important;
+                color: rgba(209, 213, 219, 0.85) !important;
+                font-weight: $font-weight-normal !important;
+
+                // 價格顯示
+                &.price-cell {
+                    font-weight: $font-weight-semibold !important;
+                }
+
+                // 市場名稱 - 藍色高亮
+                &.market-name {
+                    color: rgba(96, 165, 250, 0.9) !important; // blue-400
+                    font-weight: $font-weight-medium !important;
+                }
+
+                // 成功數據 - 綠色
+                &.success-data {
+                    color: rgba(34, 197, 94, 0.9) !important; // green-500
+                }
+
+                // 錯誤數據 - 紅色
+                &.error-data {
+                    color: rgba(239, 68, 68, 0.9) !important; // red-500
+                }
+            }
+        }
+
+        // 分頁器樣式
+        .p-paginator {
+            background: rgba(17, 24, 39, 0.5) !important;
+            border: none !important;
+            border-top: 1px solid rgba(75, 85, 99, 0.3) !important;
+            color: rgba(156, 163, 175, 0.8) !important;
+            padding: $spacing-3 $spacing-4 !important;
+
+            .p-paginator-element {
+                color: rgba(156, 163, 175, 0.8) !important;
+                background: transparent !important;
+                border: 1px solid rgba(75, 85, 99, 0.3) !important;
+                transition: all $transition-fast !important;
+
+                &:hover {
+                    background: rgba(75, 85, 99, 0.3) !important;
+                    color: rgba(209, 213, 219, 0.9) !important;
+                    border-color: rgba(75, 85, 99, 0.5) !important;
+                }
+
+                &.p-highlight {
+                    background: rgba(96, 165, 250, 0.2) !important;
+                    color: rgba(96, 165, 250, 1) !important;
+                    border-color: rgba(96, 165, 250, 0.6) !important;
+                }
+            }
+
+            .p-dropdown {
+                background: rgba(31, 41, 55, 0.9) !important;
+                border: 1px solid rgba(75, 85, 99, 0.3) !important;
+                color: rgba(209, 213, 219, 0.9) !important;
+
+                &:hover {
+                    border-color: rgba(75, 85, 99, 0.5) !important;
+                }
+            }
+        }
+    }
 }
 
-.neon-row {
-    box-shadow: 0 0 12px 2px #0ff6, 0 0 24px 4px #a0f4;
-    transition: box-shadow 0.2s;
+// 載入狀態
+.loading-overlay {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: $spacing-8;
+    color: rgba(156, 163, 175, 0.8);
+
+    .loading-spinner {
+        width: 2rem;
+        height: 2rem;
+        border: 2px solid rgba(75, 85, 99, 0.3);
+        border-top: 2px solid rgba(96, 165, 250, 0.8);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+
+    .loading-text {
+        margin-left: $spacing-3;
+        font-family: $font-family-mono;
+    }
 }
 
-.neon-green-glow {
-    text-shadow: 0 0 8px #0ff, 0 0 4px #0f08;
+// 最後更新時間
+.last-updated {
+    color: rgba(107, 114, 128, 0.7);
+    font-family: $font-family-mono;
+    font-size: $font-size-xs;
+    text-align: right;
+    margin-top: $spacing-3;
 }
 
-.neon-red-glow {
-    text-shadow: 0 0 8px #f0f, 0 0 4px #f08;
+// 動畫效果
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 
-.neon-footer {
-    text-shadow: 0 0 6px #0ff, 0 0 2px #a0f;
+// 響應式設計
+@media (max-width: $breakpoint-md) {
+    :host {
+        font-size: $font-size-xs;
+    }
+
+    :host ::ng-deep .p-datatable .p-datatable-thead > tr > th,
+    :host ::ng-deep .p-datatable .p-datatable-tbody > tr > td {
+        padding: $spacing-2 $spacing-3 !important;
+    }
 }
-:host ::ng-deep .p-paginator .p-dropdown {
-  min-width: 80px;
-  width: 5rem;
-  font-size: 1rem;
-  background: #1e293b;
-  color: #22d3ee;
-  border-radius: 0.375rem;
+
+// PrimeNG Table 樣式覆蓋 - 賽博龐克風格
+:host ::ng-deep {
+    .p-datatable {
+        background: transparent !important;
+        border: none !important;
+        border-radius: 0 !important;
+        color: rgba(209, 213, 219, 0.9) !important; // gray-300
+        font-family: $font-family-mono !important;
+
+        // 表格標題
+        .p-datatable-thead > tr > th {
+            background: linear-gradient(
+                135deg,
+                rgba(34, 197, 94, 0.1) 0%,
+                rgba(59, 130, 246, 0.08) 100%
+            ) !important;
+            border: none !important;
+            border-bottom: 1px solid rgba(34, 197, 94, 0.3) !important;
+            color: rgba(34, 197, 94, 0.9) !important;
+            font-weight: $font-weight-semibold !important;
+            padding: $spacing-3 $spacing-4 !important;
+            text-shadow: 0 0 8px rgba(34, 197, 94, 0.6) !important;
+
+            .p-sortable-column-icon {
+                color: rgba(59, 130, 246, 0.8) !important;
+            }
+        }
+
+        // 表格內容行
+        .p-datatable-tbody > tr {
+            background: rgba(17, 24, 39, 0.3) !important;
+            border: none !important;
+            border-bottom: 1px solid rgba(75, 85, 99, 0.3) !important;
+            transition:
+                background-color $transition-fast,
+                box-shadow $transition-fast,
+                transform $transition-fast !important;
+
+            &:hover {
+                background: rgba(34, 197, 94, 0.05) !important;
+                box-shadow:
+                    0 0 15px rgba(34, 197, 94, 0.2),
+                    inset 0 0 15px rgba(34, 197, 94, 0.05) !important;
+                transform: translateX(2px) !important;
+            }
+
+            > td {
+                border: none !important;
+                padding: $spacing-3 $spacing-4 !important;
+                color: rgba(209, 213, 219, 0.85) !important;
+                font-weight: $font-weight-normal !important;
+
+                // 價格顯示 - 使用 command window 的顏色方案
+                &.price-cell {
+                    font-weight: $font-weight-semibold !important;
+                    text-shadow: 0 0 6px currentColor !important;
+                }
+
+                // 市場名稱 - 藍色高亮
+                &.market-name {
+                    color: rgba(59, 130, 246, 0.9) !important;
+                    text-shadow: 0 0 6px rgba(59, 130, 246, 0.4) !important;
+                    font-weight: $font-weight-medium !important;
+                }
+
+                // 成功數據 - 綠色
+                &.success-data {
+                    color: rgba(34, 197, 94, 0.9) !important;
+                    text-shadow: 0 0 6px rgba(34, 197, 94, 0.4) !important;
+                }
+
+                // 錯誤數據 - 紅色
+                &.error-data {
+                    color: rgba(239, 68, 68, 0.9) !important;
+                    text-shadow: 0 0 6px rgba(239, 68, 68, 0.4) !important;
+                }
+            }
+        }
+
+        // 分頁器樣式
+        .p-paginator {
+            background: rgba(15, 23, 42, 0.8) !important;
+            border: none !important;
+            border-top: 1px solid rgba(34, 197, 94, 0.3) !important;
+            color: rgba(34, 197, 94, 0.8) !important;
+            padding: $spacing-3 $spacing-4 !important;
+
+            .p-paginator-element {
+                color: rgba(156, 163, 175, 0.8) !important;
+                background: transparent !important;
+                border: 1px solid rgba(75, 85, 99, 0.3) !important;
+                transition: all $transition-fast !important;
+
+                &:hover {
+                    background: rgba(34, 197, 94, 0.1) !important;
+                    color: rgba(34, 197, 94, 0.9) !important;
+                    border-color: rgba(34, 197, 94, 0.5) !important;
+                    text-shadow: 0 0 5px rgba(34, 197, 94, 0.6) !important;
+                }
+
+                &.p-highlight {
+                    background: rgba(34, 197, 94, 0.2) !important;
+                    color: rgba(34, 197, 94, 1) !important;
+                    border-color: rgba(34, 197, 94, 0.6) !important;
+                    text-shadow: 0 0 8px rgba(34, 197, 94, 0.8) !important;
+                }
+            }
+
+            .p-dropdown {
+                background: rgba(17, 24, 39, 0.9) !important;
+                border: 1px solid rgba(34, 197, 94, 0.3) !important;
+                color: rgba(34, 197, 94, 0.9) !important;
+
+                &:hover {
+                    border-color: rgba(34, 197, 94, 0.5) !important;
+                }
+            }
+        }
+    }
 }
-:host ::ng-deep .dark .p-paginator .p-dropdown {
-  background: #0f172a !important;
-  color: #e879f9 !important;
+
+// 載入狀態
+.loading-overlay {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: $spacing-8;
+    color: rgba(34, 197, 94, 0.8);
+
+    .loading-spinner {
+        width: 2rem;
+        height: 2rem;
+        border: 2px solid rgba(34, 197, 94, 0.3);
+        border-top: 2px solid rgba(34, 197, 94, 0.8);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+
+    .loading-text {
+        margin-left: $spacing-3;
+        font-family: $font-family-mono;
+        text-shadow: 0 0 6px rgba(34, 197, 94, 0.6);
+    }
 }
-.dark :host ::ng-deep .p-paginator .p-dropdown {
-  background: #0f172a;
-  color: #e879f9;
+
+// 最後更新時間 - 與 command window 一致的樣式
+.last-updated {
+    color: rgba(107, 114, 128, 0.7);
+    font-family: $font-family-mono;
+    font-size: $font-size-xs;
+    text-align: right;
+    margin-top: $spacing-2;
+    padding-right: $spacing-4;
 }
-@media (prefers-color-scheme: dark) {
-  :host ::ng-deep .p-paginator .p-dropdown {
-    background: #0f172a;
-    color: #e879f9;
-  }
+
+// 動畫效果 - 與 command window 相同
+@keyframes cyber-glow {
+    0% {
+        box-shadow:
+            inset 0 1px 0 rgba(34, 197, 94, 0.1),
+            inset 0 0 20px rgba(34, 197, 94, 0.05),
+            0 0 20px rgba(34, 197, 94, 0.15),
+            0 4px 20px rgba(0, 0, 0, 0.5);
+        border-color: rgba(34, 197, 94, 0.3);
+    }
+    100% {
+        box-shadow:
+            inset 0 1px 0 rgba(34, 197, 94, 0.2),
+            inset 0 0 30px rgba(34, 197, 94, 0.1),
+            0 0 30px rgba(34, 197, 94, 0.25),
+            0 4px 25px rgba(0, 0, 0, 0.6);
+        border-color: rgba(34, 197, 94, 0.5);
+    }
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+// 響應式設計
+@media (max-width: $breakpoint-md) {
+    .market-table-container {
+        padding: $spacing-3 $spacing-4;
+        font-size: $font-size-xs;
+    }
+
+    :host ::ng-deep .p-datatable .p-datatable-thead > tr > th,
+    :host ::ng-deep .p-datatable .p-datatable-tbody > tr > td {
+        padding: $spacing-2 $spacing-3 !important;
+    }
 }

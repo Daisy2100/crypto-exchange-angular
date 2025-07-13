@@ -1,0 +1,294 @@
+// CommandWindow 元件樣式
+// 遵循專案規範：優先使用 Tailwind CSS，必要時使用 SCSS
+@use '../../../assets/scss/variables' as *;
+@use '../../../assets/scss/themes' as *;
+
+.cmd-window {
+    // 使用專案的字體系統 - 統一等寬字體
+    font-family: $font-family-mono;
+    font-size: $font-size-sm;          // 從 xs 改為 sm，提升可讀性
+    line-height: 1.5;                  // 優化行高
+    font-weight: $font-weight-normal;
+
+    // 間距設置 - 確保適當的內邊距和外邊距
+    padding: $spacing-4 $spacing-5;    // 上下 16px，左右 20px
+    margin: $spacing-2 0;              // 上下外邊距 8px
+    height: 12rem;                     // 增加高度以便更好顯示內容 (從 10rem -> 12rem)
+    min-height: 8rem;                  // 設置最小高度
+    max-height: 16rem;                 // 設置最大高度
+
+    // 賽博龐克風格背景 - 符合專案配色
+    background:
+        linear-gradient(135deg,
+            rgba(2, 6, 23, 0.95) 0%,      // cyber-50 半透明
+            rgba(15, 23, 42, 0.98) 50%,   // gray-900
+            rgba(17, 24, 39, 0.95) 100%   // gray-800
+        );
+
+    // 邊框設計 - 使用專案的霓虹色彩
+    border: 1px solid rgba(34, 197, 94, 0.3);  // 綠色霓虹邊框
+    border-radius: $radius-xl;                  // 更大的圓角
+
+    // 賽博龐克發光效果
+    box-shadow:
+        inset 0 1px 0 rgba(34, 197, 94, 0.1),     // 內部高光
+        inset 0 0 20px rgba(34, 197, 94, 0.05),   // 內部柔光
+        0 0 20px rgba(34, 197, 94, 0.15),         // 外部發光
+        0 4px 20px rgba(0, 0, 0, 0.5);           // 深度陰影
+
+    // 霓虹發光動畫
+    animation: cyber-glow 4s ease-in-out infinite alternate;
+
+    // 滾動條樣式 - 賽博龐克風格
+    &::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: rgba(17, 24, 39, 0.8);
+        border-radius: $radius-sm;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: linear-gradient(
+            135deg,
+            rgba(34, 197, 94, 0.8) 0%,
+            rgba(59, 130, 246, 0.6) 100%
+        );
+        border-radius: $radius-sm;
+        transition: $transition-normal;
+
+        &:hover {
+            background: linear-gradient(
+                135deg,
+                rgba(34, 197, 94, 1) 0%,
+                rgba(59, 130, 246, 0.8) 100%
+            );
+        }
+    }
+
+    // 響應式設計優化
+    @media (max-width: $breakpoint-md) {
+        font-size: $font-size-xs;
+        padding: $spacing-3 $spacing-4;
+        height: 10rem;
+        margin: $spacing-1 0;
+    }
+
+    @media (max-width: $breakpoint-sm) {
+        font-size: 11px;
+        padding: $spacing-2 $spacing-3;
+        height: 8rem;
+        border-radius: $radius-lg;
+    }
+}
+
+// 命令行樣式 - 賽博龐克風格
+.current-line {
+    color: rgba(34, 197, 94, 0.9);          // 專案主色：霓虹綠
+    text-shadow:
+        0 0 8px rgba(34, 197, 94, 0.6),
+        0 0 16px rgba(34, 197, 94, 0.3);
+    margin-top: $spacing-2;                   // 適當的上邊距
+    margin-bottom: $spacing-1;                // 底部邊距
+    padding-left: $spacing-1;                 // 左側縮進
+    font-weight: $font-weight-medium;         // 稍微加粗
+
+    // 命令提示符樣式
+    &::before {
+        content: '>';
+        color: rgba(59, 130, 246, 0.8);      // 藍色提示符
+        margin-right: $spacing-2;
+        text-shadow: 0 0 5px rgba(59, 130, 246, 0.5);
+    }
+}
+
+// 游標樣式 - 更科技感的設計
+.cursor {
+    display: inline-block;
+    width: 8px;
+    height: 1em;
+    background: linear-gradient(
+        135deg,
+        rgba(34, 197, 94, 0.9) 0%,
+        rgba(59, 130, 246, 0.7) 100%
+    );
+    margin-left: 2px;
+    border-radius: 1px;
+    animation: cyber-cursor 1.5s ease-in-out infinite;
+
+    // 游標發光效果
+    box-shadow:
+        0 0 5px rgba(34, 197, 94, 0.6),
+        0 0 10px rgba(34, 197, 94, 0.3);
+}
+
+// 命令歷史樣式 - 分層次的顏色設計
+.cmd-window div:not(.current-line) {
+    color: rgba(156, 163, 175, 0.85);       // gray-400 半透明
+    margin-bottom: $spacing-1;               // 行間距
+    padding-left: $spacing-1;                // 統一縮進
+    transition:
+        color $transition-fast,
+        text-shadow $transition-fast,
+        transform $transition-fast;
+    line-height: 1.4;                        // 優化行高
+
+    &:hover {
+        color: rgba(209, 213, 219, 0.95);   // gray-300 懸停
+        text-shadow: 0 0 4px rgba(209, 213, 219, 0.3);
+        transform: translateX(2px);           // 微妙的移動效果
+    }
+
+    // 時間戳樣式
+    &:contains('[') {
+        color: rgba(107, 114, 128, 0.7);    // 時間戳更暗
+
+        // 提取時間戳部分的樣式
+        &::first-line {
+            color: rgba(107, 114, 128, 0.6);
+        }
+    }
+
+    // 特殊命令輸出高亮 - 使用專案配色
+    &:contains('load data:'),
+    &:contains('✓'),
+    &:contains('Connection established') {
+        color: rgba(34, 197, 94, 0.8);      // 成功訊息：霓虹綠
+        text-shadow: 0 0 6px rgba(34, 197, 94, 0.4);
+    }
+
+    &:contains('error'),
+    &:contains('✗'),
+    &:contains('failed') {
+        color: rgba(239, 68, 68, 0.8);      // 錯誤訊息：紅色
+        text-shadow: 0 0 6px rgba(239, 68, 68, 0.4);
+    }
+
+    &:contains('warning'),
+    &:contains('⚠') {
+        color: rgba(245, 158, 11, 0.8);     // 警告訊息：橙色
+        text-shadow: 0 0 6px rgba(245, 158, 11, 0.4);
+    }
+
+    &:contains('info'),
+    &:contains('>') {
+        color: rgba(59, 130, 246, 0.8);     // 資訊訊息：藍色
+        text-shadow: 0 0 6px rgba(59, 130, 246, 0.3);
+    }
+}
+
+// 動畫效果 - 賽博龐克風格
+@keyframes cyber-glow {
+    0% {
+        box-shadow:
+            inset 0 1px 0 rgba(34, 197, 94, 0.1),
+            inset 0 0 20px rgba(34, 197, 94, 0.05),
+            0 0 20px rgba(34, 197, 94, 0.15),
+            0 4px 20px rgba(0, 0, 0, 0.5);
+        border-color: rgba(34, 197, 94, 0.3);
+    }
+    100% {
+        box-shadow:
+            inset 0 1px 0 rgba(34, 197, 94, 0.2),
+            inset 0 0 30px rgba(34, 197, 94, 0.1),
+            0 0 30px rgba(34, 197, 94, 0.25),
+            0 4px 25px rgba(0, 0, 0, 0.6);
+        border-color: rgba(34, 197, 94, 0.5);
+    }
+}
+
+@keyframes cyber-cursor {
+    0%, 50% {
+        opacity: 1;
+        transform: scaleY(1) scaleX(1);
+        box-shadow:
+            0 0 5px rgba(34, 197, 94, 0.6),
+            0 0 10px rgba(34, 197, 94, 0.3);
+    }
+    51%, 100% {
+        opacity: 0.3;
+        transform: scaleY(0.9) scaleX(0.8);
+        box-shadow:
+            0 0 3px rgba(34, 197, 94, 0.4),
+            0 0 6px rgba(34, 197, 94, 0.2);
+    }
+}
+
+// 數據流效果 - 科技感動畫
+.data-stream {
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+            90deg,
+            transparent 0%,
+            rgba(34, 197, 94, 0.1) 50%,
+            transparent 100%
+        );
+        animation: data-flow 3s linear infinite;
+    }
+}
+
+@keyframes data-flow {
+    0% {
+        left: -100%;
+    }
+    100% {
+        left: 100%;
+    }
+}
+
+// 深色主題支援
+@include dark-mode-only {
+    .cmd-window {
+        background:
+            linear-gradient(135deg, #020617, #0f172a) padding-box,
+            linear-gradient(135deg, #06b6d4, #a855f7) border-box;
+    }
+}
+
+// 亮色主題支援
+@include light-mode-only {
+    .cmd-window {
+        background:
+            linear-gradient(135deg, #f8fafc, #e2e8f0) padding-box,
+            linear-gradient(135deg, #0891b2, #9333ea) border-box;
+        color: #1e293b;
+
+        .current-line {
+            color: #0e7490;  // cyan-700
+        }
+
+        div:not(.current-line) {
+            color: #64748b;  // slate-500
+        }
+    }
+}
+
+// 終端機打字效果（用於新增內容）
+.typewriter {
+    overflow: hidden;
+    border-right: 2px solid #06b6d4;
+    white-space: nowrap;
+    animation:
+        typing 2s steps(40, end),
+        blink-caret 0.75s step-end infinite;
+}
+
+@keyframes typing {
+    from { width: 0; }
+    to { width: 100%; }
+}
+
+@keyframes blink-caret {
+    from, to { border-color: transparent; }
+    50% { border-color: #06b6d4; }
+}

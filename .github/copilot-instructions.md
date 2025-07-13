@@ -185,6 +185,107 @@
 
 ## 專案特定規範
 
+### 卡片佈局系統
+
+```html
+<!-- ✅ 儀表板風格卡片佈局 -->
+<div class="space-y-6">
+  <!-- 功能卡片 -->
+  <div class="bg-gray-800 rounded-xl p-6 border border-gray-700 shadow-lg hover:bg-gray-750 transition-all duration-300">
+    <div class="flex items-center space-x-2 mb-4">
+      <i class="pi pi-chart-line text-blue-400"></i>
+      <span class="text-white font-semibold text-lg">卡片標題</span>
+    </div>
+    <!-- 卡片內容 -->
+  </div>
+</div>
+```
+
+### 組件風格統一原則
+
+1. **卡片容器設計**：所有主要功能區塊使用統一的卡片容器
+2. **圖標標題**：每個卡片都有相應的圖標和標題
+3. **懸停效果**：統一的懸停色彩變化 `hover:bg-gray-750`
+4. **間距系統**：使用 `space-y-6` 控制卡片間距
+5. **適應性佈局**：組件內容適應父級卡片容器，不設自定義容器樣式
+
+### CommandWindow 組件樣式規範
+
+```scss
+// ✅ 賽博龐克風格設計
+.cmd-window {
+  // 霓虹邊框和發光效果
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  box-shadow:
+    inset 0 1px 0 rgba(34, 197, 94, 0.1),
+    inset 0 0 20px rgba(34, 197, 94, 0.05),
+    0 0 20px rgba(34, 197, 94, 0.15);
+  
+  // 統一的發光動畫
+  animation: cyber-glow 4s ease-in-out infinite alternate;
+}
+
+// 顏色配置
+.current-line { color: rgba(34, 197, 94, 0.9); }  // 霓虹綠
+.success-data { color: rgba(34, 197, 94, 0.9); }  // 成功：綠色
+.error-data { color: rgba(239, 68, 68, 0.9); }    // 錯誤：紅色
+.info-data { color: rgba(59, 130, 246, 0.9); }    // 資訊：藍色
+```
+
+### Market Table 組件規範
+
+```scss
+// ✅ 適應卡片容器的表格樣式
+:host {
+  font-family: $font-family-mono;
+  font-size: $font-size-sm;
+}
+
+// 移除自定義容器，適應父級卡片
+:host ::ng-deep .p-datatable {
+  background: transparent !important;
+  border: none !important;
+  
+  // 統一的懸停效果
+  .p-datatable-tbody > tr:hover {
+    background: rgba(75, 85, 99, 0.2) !important;
+  }
+}
+```
+
+### Markets 頁面佈局範例
+
+```html
+<!-- ✅ Markets 頁面 - 儀表板風格 -->
+<div class="min-h-screen bg-gray-950 p-4 lg:p-6">
+  <!-- 頁面標題 -->
+  <div class="mb-6">
+    <h1 class="text-2xl font-bold text-white">Crypto Markets</h1>
+  </div>
+
+  <!-- 主要內容 - 卡片佈局 -->
+  <div class="space-y-6">
+    <!-- 市場表格卡片 -->
+    <div class="bg-gray-800 rounded-xl p-6 border border-gray-700 shadow-lg hover:bg-gray-750 transition-all duration-300">
+      <div class="flex items-center space-x-2 mb-4">
+        <i class="pi pi-chart-line text-blue-400"></i>
+        <span class="text-white font-semibold text-lg">Market Overview</span>
+      </div>
+      <app-market-table></app-market-table>
+    </div>
+
+    <!-- 命令視窗卡片 -->
+    <div class="bg-gray-800 rounded-xl p-6 border border-gray-700 shadow-lg hover:bg-gray-750 transition-all duration-300">
+      <div class="flex items-center space-x-2 mb-4">
+        <i class="pi pi-desktop text-green-400"></i>
+        <span class="text-white font-semibold text-lg">System Terminal</span>
+      </div>
+      <app-command-window [pushData]="commandWindowData"></app-command-window>
+    </div>
+  </div>
+</div>
+```
+
 ### 加密貨幣交易所樣式
 
 ```html

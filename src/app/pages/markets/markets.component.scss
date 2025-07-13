@@ -1,1 +1,25 @@
-/* 預留樣式區塊，優先使用 Tailwind，僅特殊需求才寫 SCSS */
+/* Markets 頁面樣式 - 優先使用 Tailwind，特殊需求才用 SCSS */
+@use '../../assets/scss/variables' as *;
+
+:host {
+    display: block;
+    min-height: 100vh;
+}
+
+// 確保 command window 在側邊欄中正確顯示
+.command-window-container {
+    // 固定高度以避免佈局跳動
+    min-height: 12rem;
+
+    // 在較小螢幕上調整
+    @media (max-width: $breakpoint-lg) {
+        min-height: 10rem;
+    }
+}
+
+// 響應式調整
+@media (max-width: $breakpoint-lg) {
+    .grid {
+        gap: 1rem;
+    }
+}

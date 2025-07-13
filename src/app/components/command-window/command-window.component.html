@@ -1,0 +1,10 @@
+<div class="cmd-window bg-gray-950 text-cyan-400 dark:text-fuchsia-300 h-40 overflow-y-auto text-left leading-relaxed">
+    <div
+        *ngFor="let line of commandHistory"
+        [innerHTML]="line"
+        class="mb-1 transition-colors duration-200">
+    </div>
+    <div class="current-line">
+        C:\CryptoEx> {{ currentCommand }}<span class="cursor">_</span>
+    </div>
+</div>

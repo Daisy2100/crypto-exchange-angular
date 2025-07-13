@@ -114,6 +114,9 @@ src/
 │   ├── components/           # 共用元件
 │   │   ├── navigation/       # 導航元件
 │   │   ├── footer/          # 頁尾元件
+│   │   ├── command-window/  # 命令視窗元件（賽博龐克風格）
+│   │   ├── market-table/    # 市場數據表格元件
+│   │   ├── market-table-order/ # 市場訂單表格元件
 │   │   ├── trading-chart/   # 交易圖表元件
 │   │   └── order-book/      # 訂單簿元件
 │   ├── pages/               # 頁面元件
@@ -194,6 +197,35 @@ src/
 - **服務**: `NavigationService` 管理選單項目
 
 詳細使用說明請參考：`src/app/components/navigation/README.md`
+
+### 命令視窗元件 (CommandWindowComponent)
+
+- **位置**: `src/app/components/command-window/`
+- **功能**: 賽博龐克風格的終端機介面，顯示系統狀態和數據更新
+- **特色**:
+  - 霓虹發光效果和動畫
+  - 實時數據推送顯示
+  - 打字機效果和游標動畫
+  - 響應式設計適配各種螢幕
+- **使用**: 接收 `pushData` 輸入來顯示系統訊息和市場數據更新
+
+### 市場表格元件 (MarketTableComponent)
+
+- **位置**: `src/app/components/market-table/`
+- **功能**: 顯示加密貨幣市場數據的專業表格
+- **特色**:
+  - 適應卡片容器佈局
+  - 即時價格和變化顯示
+  - 排序和分頁功能
+  - 響應式設計
+- **整合**: 與 CommandWindow 共享統一的設計語言
+
+### 卡片佈局系統
+
+- **設計原則**: 參照儀表板風格，每個功能區塊使用獨立卡片
+- **視覺一致性**: 統一的灰色卡片背景、圓角設計、懸停效果
+- **響應式**: 完整支援桌面和行動裝置
+- **應用**: Markets 頁面採用此佈局系統
 
 ## 🔧 配置檔案
 

@@ -1,1 +1,25 @@
-<app-market-table></app-market-table>
+<!-- Markets 頁面 - 儀表板卡片風格佈局 -->
+
+<!-- 主要內容 - 卡片佈局 -->
+<div class="space-y-6">
+
+    <!-- 市場表格卡片 - 上方 -->
+    <div
+        class="bg-gray-800 rounded-xl p-6 border border-gray-700 shadow-lg hover:bg-gray-750 transition-all duration-300">
+        <div class="flex items-center space-x-2 mb-4">
+            <i class="pi pi-chart-line text-blue-400"></i>
+            <span class="text-white font-semibold text-lg">Market Overview</span>
+        </div>
+        <app-market-table></app-market-table>
+    </div>
+
+    <!-- 命令視窗卡片 - 下方 -->
+    <div
+        class="bg-gray-800 rounded-xl p-6 border border-gray-700 shadow-lg hover:bg-gray-750 transition-all duration-300">
+        <div class="flex items-center space-x-2 mb-4">
+            <i class="pi pi-desktop text-green-400"></i>
+            <span class="text-white font-semibold text-lg">System Terminal</span>
+        </div>
+        <app-command-window [pushData]="commandWindowData"></app-command-window>
+    </div>
+</div>

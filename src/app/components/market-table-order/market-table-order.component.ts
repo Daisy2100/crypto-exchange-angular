@@ -12,6 +12,7 @@ import { CardModule } from 'primeng/card';
 import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { DecimalPipe } from '@angular/common';
+import { CommandWindowComponent } from '../command-window/command-window.component';
 
 @Component({
     selector: 'app-market-table-order',
@@ -22,7 +23,8 @@ import { DecimalPipe } from '@angular/common';
         CardModule,
         DialogModule,
         InputTextModule,
-        DecimalPipe
+        DecimalPipe,
+        CommandWindowComponent
     ],
     templateUrl: './market-table-order.component.html',
     styleUrls: ['./market-table-order.component.scss']
@@ -53,6 +55,7 @@ export class MarketTableOrderComponent implements OnInit, AfterViewInit, OnDestr
     maxBidVolume = 1;
     maxAskVolume = 1;
     cmdOutputList: string[] = [];
+    cmdPushData: any = null;
     showModal = false;
     commonData = {
         data: {
@@ -116,7 +119,14 @@ export class MarketTableOrderComponent implements OnInit, AfterViewInit, OnDestr
         this.fetchClosedOrders();
         this.fetchBalances();
         this.startAutoRefresh();
-        this.cmdOutputList.push(`C: \\CryptoEx> trading ${this.baseAsset}/${this.quoteAsset}\nLoading market data...`);
+
+        // 推送初始化數據到 CommandWindow
+        this.pushToCommandWindow({
+            action: 'init',
+            market: `${this.baseAsset}/${this.quoteAsset}`,
+            status: 'connected',
+            timestamp: new Date().toISOString()
+        });
 
         if (this.auth.isAuthenticated()) {
             this.limitPrice = this.askSide[0] ? this.askSide[0].price : 0.0;
@@ -260,6 +270,7 @@ export class MarketTableOrderComponent implements OnInit, AfterViewInit, OnDestr
         // 更新最新價格
         if (prices.length > 0) {
             this.latestPrice = prices[prices.length - 1];
+            this.pushKlineUpdate();
         }
     }
 
@@ -341,6 +352,8 @@ export class MarketTableOrderComponent implements OnInit, AfterViewInit, OnDestr
                 if (this.askSide.length > 0) {
                     this.maxAskVolume = Math.max(...this.askSide.map((ask: any) => parseFloat(ask.volume)));
                 }
+
+                this.pushOrderBookUpdate();
             } else {
                 // 生成模擬訂單簿數據
                 this.generateMockOrderBook();
@@ -407,4 +420,28 @@ export class MarketTableOrderComponent implements OnInit, AfterViewInit, OnDestr
     getStatusText(balance: any): string { return balance.total === 0 ? 'Empty' : balance.locked > 0 ? 'Locked' : 'Available'; }
     formatBalancesForCmd(): string { return JSON.stringify({ summary: { totalAssets: this.balances.length, nonZeroBalances: this.balances.filter(b => b.total > 0).length, timestamp: new Date().toISOString() }, balances: this.balances }, null, 2); }
     changePlaceOrderBtn(btnName: 'Buy' | 'Sell') { this.placeOrderBtn = btnName; }
+
+    // CommandWindow 相關方法
+    pushToCommandWindow(data: any) {
+        this.cmdPushData = { ...data, timestamp: new Date().toISOString() };
+    }
+
+    private pushOrderBookUpdate() {
+        this.pushToCommandWindow({
+            action: 'orderbook_update',
+            bids: this.bidSide.length,
+            asks: this.askSide.length,
+            spread: this.askSide[0] && this.bidSide[0] ?
+                (parseFloat(this.askSide[0].price) - parseFloat(this.bidSide[0].price)).toFixed(2) : 'N/A'
+        });
+    }
+
+    private pushKlineUpdate() {
+        this.pushToCommandWindow({
+            action: 'kline_update',
+            price: this.latestPrice,
+            market: `${this.baseAsset}/${this.quoteAsset}`,
+            interval: this.chartInterval
+        });
+    }
 }
