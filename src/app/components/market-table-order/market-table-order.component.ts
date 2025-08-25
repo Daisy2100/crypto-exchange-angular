@@ -1,5 +1,6 @@
 
 import { Component, OnInit, OnDestroy, AfterViewInit, ViewChild, ElementRef, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AuthHttpService } from '@auth/auth-http.service';
@@ -18,13 +19,14 @@ import { CommandWindowComponent } from '../command-window/command-window.compone
     selector: 'app-market-table-order',
     standalone: true,
     imports: [
-        FormsModule,
-        ButtonModule,
-        CardModule,
-        DialogModule,
-        InputTextModule,
-        DecimalPipe,
-        CommandWindowComponent
+    CommonModule,
+    FormsModule,
+    ButtonModule,
+    CardModule,
+    DialogModule,
+    InputTextModule,
+    DecimalPipe,
+    CommandWindowComponent
     ],
     templateUrl: './market-table-order.component.html',
     styleUrls: ['./market-table-order.component.scss']

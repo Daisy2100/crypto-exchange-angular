@@ -9,6 +9,7 @@ import { SidebarModule } from 'primeng/sidebar';
 import { ButtonModule } from 'primeng/button';
 import { CommonModule } from '@angular/common';
 import { MenuItem } from 'primeng/api';
+import { LoginModalComponent } from '../login-modal/login-modal.component';
 import { NavigationService, NavigationItem } from './navigation.service';
 import { TranslatePipe } from '@core/i18n/translate.pipe';
 import { I18nService } from '@core/i18n/i18n.service';
@@ -16,12 +17,14 @@ import { I18nService } from '@core/i18n/i18n.service';
 @Component({
     selector: 'app-navigation',
     standalone: true,
-    imports: [RouterModule, MenubarModule, BadgeModule, InputTextModule, AvatarModule, RippleModule, SidebarModule, ButtonModule, CommonModule, TranslatePipe],
+    imports: [RouterModule, MenubarModule, BadgeModule, InputTextModule, AvatarModule, RippleModule, SidebarModule, ButtonModule, CommonModule, TranslatePipe, LoginModalComponent],
     templateUrl: './navigation.component.html',
     styleUrl: './navigation.component.scss'
 })
 
 export class NavigationComponent implements OnInit, OnDestroy {
+    currentUsername: string | null = null;
+// ...existing code...
     isMobile: boolean = false;
     private resizeListener: (() => void) | null = null;
     @Input() logoText: string = 'CryptoExchange'; // 可自定義的 Logo 文字
@@ -34,6 +37,32 @@ export class NavigationComponent implements OnInit, OnDestroy {
     // 賽博龐克動畫相關
     currentCharIndex: number = 0;
     animationInterval: any = null;
+
+    // 登入 Modal 狀態
+    loginModalVisible: boolean = false;
+    loginModalMode: 'login' | 'register' = 'login';
+    /**
+     * 開啟登入/註冊 Modal
+     */
+    openLoginModal(mode: 'login' | 'register') {
+        this.loginModalMode = mode;
+        this.loginModalVisible = true;
+    }
+
+    /**
+     * Modal 關閉事件
+     */
+    handleLoginModalClose() {
+        this.loginModalVisible = false;
+    }
+
+    /**
+     * 登入成功事件
+     */
+    handleLoginSuccess(data: { username: string; token: string }) {
+    this.loginModalVisible = false;
+    this.currentUsername = data.username;
+    }
 
     constructor(
         private navigationService: NavigationService,

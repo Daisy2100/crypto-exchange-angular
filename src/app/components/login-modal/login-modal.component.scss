@@ -1,0 +1,44 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+:host ::ng-deep .cyber-modal {
+    font-family: 'Press Start 2P', monospace;
+    background: rgba(51, 0, 51, 0.95);
+    border: 3px solid #ff99ff;
+    box-shadow: 0 0 20px #ff66cc, 0 0 40px #9900cc;
+    border-radius: 8px;
+    color: #fff;
+}
+
+:host ::ng-deep .cmd-window {
+    background: #1a001a;
+    color: #ff66cc;
+    font-family: 'Courier New', monospace;
+    padding: 12px;
+    margin-top: 10px;
+    border: 2px solid #ff99ff;
+    height: 120px;
+    overflow-y: auto;
+    box-shadow: inset 0 0 10px #9900cc;
+    font-size: 11px;
+}
+
+:host ::ng-deep .cursor-line {
+    color: #ff66cc;
+}
+
+:host ::ng-deep .cursor {
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+
+    0%,
+    50% {
+        opacity: 1;
+    }
+
+    51%,
+    100% {
+        opacity: 0;
+    }
+}

@@ -113,4 +113,20 @@ export class AuthHttpService {
 
         return token
     }
+
+    // 儲存 token 與 username，並同步到 AuthStoreService
+    setAuthData(token: string, username: string) {
+        localStorage.setItem('token', token);
+        localStorage.setItem('username', username);
+        this.token = token;
+        try {
+            // 動態注入 AuthStoreService，避免循環依賴
+            const store = (window as any).ng?.injector?.get?.('AuthStoreService')
+            if (store) {
+                store.setAuthData(token, username);
+            }
+        } catch (e) {
+            // 若無法注入則略過
+        }
+    }
 }
