@@ -2,9 +2,8 @@ import { Routes } from '@angular/router';
 import { AboutComponent } from './pages/about/about.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { MarketsComponent } from './pages/markets/markets.component';
-
-
 import { MarketOrderComponent } from './pages/market-order/market-order.component';
+import { authGuard } from './auth/auth.guard';
 
 export const routes: Routes = [
     { path: '', component: DashboardComponent },
@@ -12,4 +11,12 @@ export const routes: Routes = [
     { path: 'markets', component: MarketsComponent },
     { path: 'market-order/:tradingPair', component: MarketOrderComponent },
     { path: 'market-order', component: MarketOrderComponent },
+    // Protected routes that require authentication
+    { 
+        path: 'trade/:market', 
+        component: MarketOrderComponent,
+        canActivate: [authGuard]
+    },
+    // Catch-all route
+    { path: '**', redirectTo: '' }
 ];
