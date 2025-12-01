@@ -236,14 +236,14 @@ export class WebSocketService implements OnDestroy {
         const candleData: CandleData[] = [];
         const volumeData: VolumeData[] = [];
 
-        if (data.t && Array.isArray(data.t)) {
+        if (data?.t && Array.isArray(data.t) && data.o && data.h && data.l && data.c && data.v) {
             for (let i = 0; i < data.t.length; i++) {
                 const time = data.t[i];
-                const open = data.o[i];
-                const high = data.h[i];
-                const low = data.l[i];
-                const close = data.c[i];
-                const volume = Math.abs(data.v[i]);
+                const open = data.o[i] ?? 0;
+                const high = data.h[i] ?? 0;
+                const low = data.l[i] ?? 0;
+                const close = data.c[i] ?? 0;
+                const volume = Math.abs(data.v[i] ?? 0);
 
                 candleData.push({ time, open, high, low, close });
                 volumeData.push({

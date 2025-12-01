@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of, BehaviorSubject, interval } from 'rxjs';
-import { map, catchError, tap, switchMap, shareReplay } from 'rxjs/operators';
+import { Observable, of, BehaviorSubject, interval, Subject, Subscription } from 'rxjs';
+import { map, catchError, tap, takeUntil } from 'rxjs/operators';
 import { environment } from '@environments/environment';
 import { WebSocketService } from './websocket.service';
 
@@ -57,9 +57,10 @@ export interface OrderBookResponse {
 @Injectable({
     providedIn: 'root'
 })
-export class MarketService {
+export class MarketService implements OnDestroy {
     private baseUrl = environment.apiUrl;
     private mockMode = environment.mockBackend;
+    private destroy$ = new Subject<void>();
 
     // Cached markets
     private _markets$ = new BehaviorSubject<Market[]>([]);
@@ -136,6 +137,11 @@ export class MarketService {
             this._markets$.next(this.mockMarkets);
             this.startMockPriceUpdates();
         }
+    }
+
+    ngOnDestroy(): void {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 
     /**
@@ -296,6 +302,7 @@ export class MarketService {
     private startMockPriceUpdates(): void {
         // Update mock prices every 3 seconds
         interval(3000).pipe(
+            takeUntil(this.destroy$),
             tap(() => {
                 this.mockMarkets = this.mockMarkets.map(market => {
                     const change = (Math.random() - 0.5) * 0.02;

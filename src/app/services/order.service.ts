@@ -222,7 +222,7 @@ export class OrderService {
     // ==================== Mock Methods ====================
 
     private mockPlaceOrder(market: string, orderData: OrderRequest): Observable<PlaceOrderResponse> {
-        const orderId = `order-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+        const orderId = `order-${Date.now()}-${Math.random().toString(36).substring(2, 11)}`;
         
         const newOrder: Order = {
             id: orderId,
