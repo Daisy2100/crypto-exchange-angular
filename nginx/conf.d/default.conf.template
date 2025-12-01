@@ -1,0 +1,65 @@
+server {
+    listen       8080;
+    listen  [::]:8080;
+
+    # Root directory for Angular app
+    root   /app;
+    index  index.html index.htm;
+
+    location / {
+        try_files $uri $uri/ /index.html;
+
+        # Security headers
+        add_header X-Frame-Options SAMEORIGIN;
+        add_header X-Content-Type-Options nosniff;
+        add_header X-XSS-Protection "1; mode=block";
+
+        # Cache static assets
+        add_header Cache-Control "public, max-age=600";
+    }
+
+    # Handle HTML files - no caching
+    location ~* \.(?:htm|html)$ {
+        add_header Cache-Control "no-cache, no-store, must-revalidate";
+        add_header Pragma "no-cache";
+        add_header Expires "0";
+    }
+
+    # Handle static assets with longer cache
+    location ~* \.(?:css|js|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot)$ {
+        add_header Cache-Control "public, max-age=31536000, immutable";
+    }
+
+    # API proxy configuration (optional - uncomment if needed)
+    # location /api/ {
+    #     proxy_pass http://backend-host:8080/api/;
+    #     proxy_http_version 1.1;
+    #     proxy_set_header Upgrade $http_upgrade;
+    #     proxy_set_header Connection 'upgrade';
+    #     proxy_set_header Host $host;
+    #     proxy_cache_bypass $http_upgrade;
+    # }
+
+    # WebSocket proxy configuration (optional - uncomment if needed)
+    # location /ws {
+    #     proxy_pass http://ws-host:8081/ws;
+    #     proxy_http_version 1.1;
+    #     proxy_set_header Upgrade $http_upgrade;
+    #     proxy_set_header Connection "upgrade";
+    #     proxy_set_header Host $host;
+    #     proxy_read_timeout 86400;
+    # }
+
+    # Error pages
+    error_page 500 502 503 504 /50x.html;
+    location = /50x.html {
+        root /usr/share/nginx/html;
+    }
+
+    # Health check endpoint
+    location /health {
+        access_log off;
+        return 200 "healthy\n";
+        add_header Content-Type text/plain;
+    }
+}
